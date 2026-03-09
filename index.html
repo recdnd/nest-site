@@ -276,18 +276,18 @@
       color: red;
       transform: scale(1.06);
     }
-    /* 移動版 thread：畫廊級完整顯示，橫圖不裁 */
+    /* 移動版 thread：畫廊級完整顯示，橫圖不裁；無深色外框，圓角僅在圖片上 */
     @media (max-width: 768px) {
       .thread-image-wrapper {
         display: flex;
         justify-content: center;
         align-items: center;
-        background: #111;
+        background: transparent;
         height: auto;
         min-height: 240px;
-        overflow: hidden;
+        overflow: visible;
         padding: 8px 0;
-        border-radius: 8px;
+        border-radius: 0;
       }
       .thread-image-wrapper img {
         width: 100%;
@@ -296,6 +296,7 @@
         object-fit: contain;
         object-position: center center;
         display: block;
+        border-radius: 8px;
       }
       .thread-image-wrapper.is-wide img {
         max-height: 72vh;
