@@ -446,7 +446,7 @@
       left: 0;
       width: 100vw;
       height: 100vh;
-      background: #0f0f0f;
+      background: #0d0d0d;
       z-index: 1000;
       display: none;
       flex-direction: column;
@@ -794,7 +794,7 @@
 
     /* Dark mode */
     body.dark {
-      background: #111;
+      background: #0d0d0d;
       color: #ddd;
     }
     body.dark .center,
@@ -878,8 +878,8 @@
       </header>
       <div class="gallery-container">
         <div class="view-tabs">
-          <button type="button" class="view-tab" id="tabThread" data-mode="thread">Thread</button>
-          <button type="button" class="view-tab active" id="tabMedia" data-mode="media">Media</button>
+          <button type="button" class="view-tab active" id="tabThread" data-mode="thread">Thread</button>
+          <button type="button" class="view-tab" id="tabMedia" data-mode="media">Media</button>
         </div>
         <div class="gallery" id="gallery"></div>
       </div>
@@ -914,7 +914,7 @@
     let currentIndex = -1;
     let r18Enabled = localStorage.getItem('r18') === '1';
     let preloadedImages = new Map();
-    let viewMode = 'media'; // 'media' or 'thread'
+    let viewMode = 'thread'; // 'media' or 'thread'
     let initialArtId = null;
     // URL 參數：允許 ?pack= / ?art= 深連結
     (function initFromUrl() {
@@ -1988,7 +1988,7 @@
       }
       tabThread.onclick = () => setMode('thread');
       tabMedia.onclick = () => setMode('media');
-      // 預設 media 已 active，確保 render 一次
+      // 預設 thread 已 active，確保 render 一次
       renderCurrentView();
     }
 
