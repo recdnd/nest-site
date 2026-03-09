@@ -1,0 +1,245 @@
+{
+  "packId": "past-works",
+  "label": "past-works",
+  "sets": {
+    "my-julie": {
+      "tags": [
+        "Julie Winters",
+        "The Maxx"
+      ]
+    },
+    "fkmt-rei": {
+      "tags": [
+        "賭博覇王伝 零",
+        "ギャン鬼",
+        "宇海零",
+        "福本伸行",
+        "Gambling Emperor Legend Zero",
+        "Ukai Zero",
+        "Nobuyuki Fukumoto",
+        "FKMT",
+        "義賊",
+        "R-18"
+      ]
+    },
+    "maito": {
+      "tags": [
+        "勇者特急マイトガイン",
+        "旋風寺舞人",
+        "Brave Express Might Gaine",
+        "Maito Senpuuji"
+      ]
+    }
+  },
+  "items": [
+    {
+      "file": "20210820__dororo__out.png",
+      "title": null,
+      "tags": [
+        "どろろ",
+        "百鬼丸",
+        "Dororo",
+        "Hyakkimaru"
+      ],
+      "set": null,
+      "crop": { "x": 50, "y": 28 }
+    },
+    {
+      "file": "20210820__qbot-mightgaine__out.png",
+      "title": null,
+      "tags": [
+        "勇者特急マイトガイン",
+        "Brave Express Might Gaine"
+      ],
+      "set": null
+    },
+    {
+      "file": "20210820__skates-bluesproto__out.png",
+      "title": null,
+      "tags": [
+        "Rockman",
+        "Meagan",
+        "ロックマン",
+        "ブルーズ",
+        "Blues",
+        "Proto Man"
+      ],
+      "set": null,
+      "crop": { "x": 50, "y": 22 }
+    },
+    {
+      "file": "20210820__shark__out.png",
+      "title": null,
+      "tags": [
+        "Reginald Kastle",
+        "Kamishiro Ryoga",
+        "神代凌牙",
+        "遊☆戯☆王ZEXAL",
+        "遊戯王ゼアル"
+      ],
+      "set": null
+    },
+    {
+      "file": "20211017__koji-keychain-lined__out.png",
+      "title": null,
+      "tags": [
+        "マジンサーガ",
+        "Kabuto Kouji",
+        "兜甲児"
+      ],
+      "set": null
+    },
+    {
+      "file": "20220520__chojinroku__out.png",
+      "title": null,
+      "tags": [
+        "超人ロック",
+        "LOCKE THE ZUPERMAN"
+      ],
+      "set": null
+    },
+    {
+      "file": "20210325__maito-motor__out.png",
+      "title": null,
+      "tags": [],
+      "set": "maito"
+    },
+    {
+      "file": "20201230__maitokaze__out.png",
+      "title": null,
+      "tags": [],
+      "set": "maito"
+    },
+    {
+      "file": "20201023__mightgaine__out.png",
+      "title": null,
+      "tags": [],
+      "set": "maito"
+    },
+    {
+      "file": "20210325__ink-getter__ext.jpg",
+      "title": null,
+      "tags": [],
+      "set": null,
+      "crop": { "x": 50, "y": 76 }
+    },
+    {
+      "file": "20210313__5blues__out.png",
+      "title": null,
+      "tags": [
+        "Rockman",
+        "Meagan",
+        "ロックマン",
+        "ブルーズ",
+        "Blues",
+        "Proto Man"
+      ],
+      "set": null
+    },
+    {
+      "file": "20200718__my-julie2__ext.jpg",
+      "title": null,
+      "tags": [
+        "Julie Winters",
+        "The Maxx"
+      ],
+      "set": null,
+      "crop": { "x": 50, "y": 8 }
+    },
+    {
+      "file": "20200716__fkmt-kako__pv-ext.jpg",
+      "title": null,
+      "tags": [],
+      "set": "fkmt-rei",
+      "crop": { "x": 50, "y": 40 }
+    },
+    {
+      "file": "20200910__rei-shibaru__qq-ext.jpg",
+      "title": null,
+      "tags": [],
+      "set": "fkmt-rei"
+    },
+    {
+      "file": "20200616__hangover__out.png",
+      "title": null,
+      "tags": [
+        "Southpark",
+        "Stan×Kytan",
+        "Style",
+        "Stan Marsh",
+        "Kyle Broflovski"
+      ],
+      "set": null
+    },
+    {
+      "file": "20200610__my-julie3__ext.jpg",
+      "title": null,
+      "tags": [],
+      "set": "my-julie"
+    },
+    {
+      "file": "20200518__yusei__out.png",
+      "title": null,
+      "tags": ["不動遊星", "Fudo Yusei", "遊☆戯☆王5D’s", "縛り"],
+      "set": null,
+      "crop": { "x": 50, "y": 12 }
+    },
+    {
+      "file": "20200502__my-julie__ext.jpg",
+      "title": null,
+      "tags": [],
+      "set": "my-julie"
+    },
+    {
+      "file": "20200501__my-julie__line__ext.jpg",
+      "title": null,
+      "tags": [],
+      "set": "my-julie"
+    },
+    {
+      "file": "20200320__insect-mecha__qq-ext.jpg",
+      "title": null,
+      "tags": [
+        "oc",
+        "mecha",
+        "dragonfly",
+        "concept art"
+      ],
+      "set": null,
+      "crop": { "x": 50, "y": 16 }
+    },
+    {
+      "file": "20200314__sdm-brothers__ext.jpg",
+      "title": null,
+      "tags": [
+        "東方Project",
+        "上海アリス幻樂団",
+        "東方紅魔郷",
+        "十六夜咲夜",
+        "門番×メイド長",
+        "紅美鈴",
+        "紅魔館門番"
+      ],
+      "set": null,
+      "crop": { "x": 50, "y": 20 }
+    },
+    {
+      "file": "20200215__jo5__qq-ext.jpg",
+      "title": null,
+      "tags": [
+        "メロギア",
+        "金髪×水色",
+        "ジョジョの奇妙な冒険 黄金の風",
+        "JoJo's Bizarre Adventure: Golden Wind",
+        "La Squadra Esecuzioni",
+        "暗殺チーム",
+        "メローネ",
+        "Melone",
+        "ギアッチョ",
+        "Ghiaccio"
+      ],
+      "set": null,
+      "crop": { "x": 50, "y": 20 }
+    }
+  ]
+}

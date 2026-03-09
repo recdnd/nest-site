@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Rights · 死の巣の劇</title>
+  <link rel="icon" href="favicon32.png" type="image/png" />
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Courier+Prime&display=swap');
+    * {
+      box-sizing: border-box;
+    }
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      min-height: 100vh;
+      background-color: rgb(222, 222, 222);
+      color: #222;
+      font-family: 'Courier Prime', monospace;
+    }
+    body {
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+    }
+    .page {
+      max-width: 720px;
+      padding: 32px 16px 48px;
+    }
+    .page-title {
+      font-size: 1rem;
+      letter-spacing: 0.08em;
+      margin: 0 0 1.5rem;
+    }
+    .site-label {
+      color: #777;
+      font-size: 0.8rem;
+      margin-bottom: 2rem;
+    }
+    h2 {
+      font-size: 0.95rem;
+      margin: 1.5rem 0 0.5rem;
+    }
+    p {
+      font-size: 0.85rem;
+      line-height: 1.7;
+      margin: 0 0 0.75rem;
+    }
+    ul {
+      padding-left: 1.2rem;
+      margin: 0 0 0.75rem;
+    }
+    li {
+      font-size: 0.85rem;
+      line-height: 1.7;
+      margin-bottom: 0.25rem;
+    }
+    .mono {
+      font-family: 'Courier Prime', monospace;
+    }
+    .back-link {
+      margin-top: 2.5rem;
+      font-size: 0.8rem;
+      color: #777;
+    }
+    .back-link a {
+      color: #777;
+      text-decoration: none;
+    }
+    .back-link a:hover {
+      color: #e55;
+    }
+    /* 移動版底部 ribbon：與畫廊頁同邏輯，預設隱藏、下滑顯示、上滑/頂部隱藏、idle 變淡 */
+    @media (max-width: 1100px) {
+      .page {
+        padding-bottom: 60px;
+      }
+      .mobile-dock {
+        display: flex;
+        position: fixed;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        width: 100%;
+        height: 42px;
+        padding-bottom: env(safe-area-inset-bottom, 0px);
+        align-items: center;
+        justify-content: center;
+        z-index: 100;
+        pointer-events: none;
+        opacity: 0;
+        transform: translateY(100%);
+        transition: transform 180ms ease, opacity 220ms ease;
+        background: linear-gradient(to bottom, rgba(236, 90, 90, 0.86), rgba(221, 80, 80, 0.84));
+      }
+      body.dark .mobile-dock {
+        background: linear-gradient(to bottom, rgba(236, 90, 90, 0.76), rgba(221, 80, 80, 0.74));
+      }
+      .mobile-dock.mobile-dock-visible {
+        pointer-events: auto;
+        transform: translateY(0);
+        opacity: 1;
+      }
+      .mobile-dock.mobile-dock-visible.mobile-dock-idle {
+        opacity: 0.84;
+      }
+      .mobile-dock-track {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 12px;
+        overflow-x: auto;
+        overflow-y: hidden;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+        max-width: 100%;
+        padding: 0 12px;
+        flex: 1;
+      }
+      .mobile-dock-track::-webkit-scrollbar {
+        display: none;
+      }
+      .dock-emblem {
+        flex: 0 0 auto;
+        color: rgba(255, 255, 255, 0.96);
+        text-decoration: none;
+        font-size: 1rem;
+        margin-right: 4px;
+        -webkit-tap-highlight-color: transparent;
+      }
+      .dock-emblem:hover {
+        color: #fff;
+      }
+      .dock-item {
+        flex: 0 0 auto;
+        padding: 4px 10px;
+        font: inherit;
+        font-size: 12px;
+        line-height: 1.4;
+        border-radius: 6px;
+        border: none;
+        background: rgba(255, 255, 255, 0.16);
+        color: rgba(255, 255, 255, 0.88);
+        text-decoration: none;
+        cursor: pointer;
+        transition: background 0.12s ease;
+        white-space: nowrap;
+        -webkit-tap-highlight-color: transparent;
+      }
+      .dock-item:hover,
+      .dock-item:active {
+        background: rgba(255, 255, 255, 0.24);
+      }
+      .dock-item-rights {
+        background: rgba(255, 255, 255, 0.22);
+        color: rgba(255, 255, 255, 0.92);
+      }
+      .dock-item-rights:hover,
+      .dock-item-rights:active {
+        background: rgba(255, 255, 255, 0.28);
+      }
+      .dock-item-rights.active {
+        color: rgba(255, 255, 255, 0.96);
+        background: rgba(0, 0, 0, 0.20);
+      }
+    }
+    @media (min-width: 1101px) {
+      .mobile-dock {
+        display: none !important;
+      }
+    }
+    @media (prefers-color-scheme: dark) {
+      html, body {
+        background: #111;
+        color: #ddd;
+      }
+      .site-label {
+        color: #999;
+      }
+      .back-link {
+        color: #888;
+      }
+      .back-link a {
+        color: #888;
+      }
+      .back-link a:hover {
+        color: #e55;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <h1 class="page-title">NEST ART SITE LICENSE (NASL) v1.0</h1>
+    <div class="site-label">死の巣の劇 · nest.rec.ooo</div>
+
+    <p>Copyright (c) 2013–2026 Rec Dungeons (rec.ooo). All rights reserved.</p>
+
+    <p>This website is a public art archive and gallery. Unless explicitly stated otherwise, all artworks, images, texts, and related visual assets displayed here are protected by copyright.</p>
+
+    <h2>PERMITTED USES</h2>
+    <ul>
+      <li>1. Personal viewing, study, and local bookmarking for personal use.</li>
+      <li>2. Sharing links to this website or to specific artwork pages with proper attribution.</li>
+      <li>3. Quoting small, low-resolution excerpts for commentary, review, or discussion, with attribution.</li>
+    </ul>
+
+    <h2>ATTRIBUTION</h2>
+    <p>When attribution is required, use:</p>
+    <ul>
+      <li>- Author: Rec Dungeons</li>
+      <li>- Website: <span class="mono">https://rec.ooo</span></li>
+    </ul>
+
+    <h2>PROHIBITED USES (WITHOUT PRIOR WRITTEN PERMISSION)</h2>
+    <ul>
+      <li>1. Any commercial use, including selling, printing for sale, merchandise, paid distribution, advertising use, or monetized reuse.</li>
+      <li>2. Reposting, reuploading, mirroring, or redistributing full-size artworks to other websites, platforms, or archives.</li>
+      <li>3. Editing, modifying, tracing, recoloring, collaging, or otherwise creating and distributing derivative works.</li>
+      <li>4. Removing signatures, credits, watermarks, or misleading others about authorship.</li>
+      <li>5. Using any artwork, crop, derivative, metadata, or related material for training, fine-tuning, validating, indexing, or benchmarking machine learning / generative AI systems or datasets.</li>
+      <li>6. Automated scraping, bulk downloading, or dataset collection.</li>
+    </ul>
+
+    <h2>AI / MACHINE LEARNING NOTICE</h2>
+    <p>No permission is granted to use any content from this site, including images, crops, thumbnails, metadata, tags, filenames, or mirrored copies, for AI training, dataset construction, model evaluation, or related machine learning purposes.</p>
+
+    <h2>THIRD-PARTY / FANWORK NOTICE</h2>
+    <p>Some works may involve fan content, collaborations, gifts, or third-party elements. Rights remain with their respective owners where applicable. When in doubt, treat all content as all rights reserved and do not redistribute.</p>
+
+    <h2>REQUESTING PERMISSION</h2>
+    <p>For licensing or usage requests not covered above, please contact:<br /><span class="mono">https://rec.ooo</span></p>
+
+    <h2>NO WARRANTY</h2>
+    <p>This site is provided "as is" without warranties of any kind.</p>
+
+    <p>By accessing this site, you agree to these terms.</p>
+
+    <div class="back-link">
+      <a href="./index.html">/back</a>
+    </div>
+  </main>
+
+  <div class="mobile-dock" id="mobileDock" aria-hidden="true">
+    <div class="mobile-dock-track">
+      <a class="dock-emblem" href="https://rec.ooo" target="_blank" rel="noopener" title="rec.ooo">𝓡</a>
+      <a class="dock-item" href="./index.html?pack=2024-2025">2024-2025</a>
+      <a class="dock-item" href="./index.html?pack=2022-2023">2022-2023</a>
+      <a class="dock-item" href="./index.html?pack=eden">eden</a>
+      <a class="dock-item" href="./index.html?pack=past-works">past-works</a>
+      <span class="dock-item dock-item-rights active" aria-current="page">rights</span>
+    </div>
+  </div>
+
+  <script>
+    (function() {
+      if (localStorage.getItem('theme') === 'dark') document.body.classList.add('dark');
+    })();
+    (function initRightsDockScroll() {
+      var dock = document.getElementById('mobileDock');
+      if (!dock) return;
+      var threshold = 14;
+      var topHide = 60;
+      var idleDelay = 1000;
+      var lastScrollY = window.scrollY || 0;
+      var ticking = false;
+      var idleTimer = null;
+      function resetIdleTimer() {
+        dock.classList.remove('mobile-dock-idle');
+        if (idleTimer) clearTimeout(idleTimer);
+        idleTimer = setTimeout(function() {
+          if (dock.classList.contains('mobile-dock-visible')) dock.classList.add('mobile-dock-idle');
+          idleTimer = null;
+        }, idleDelay);
+      }
+      function updateDock() {
+        var w = window.innerWidth;
+        var y = window.scrollY || 0;
+        if (w > 1100) {
+          dock.classList.remove('mobile-dock-visible', 'mobile-dock-idle');
+          dock.setAttribute('aria-hidden', 'true');
+          lastScrollY = y;
+          ticking = false;
+          return;
+        }
+        resetIdleTimer();
+        if (y < topHide) {
+          dock.classList.remove('mobile-dock-visible', 'mobile-dock-idle');
+          dock.setAttribute('aria-hidden', 'true');
+        } else if (y > lastScrollY + threshold) {
+          dock.classList.add('mobile-dock-visible');
+          dock.classList.remove('mobile-dock-idle');
+          dock.setAttribute('aria-hidden', 'false');
+        } else if (y < lastScrollY - threshold) {
+          dock.classList.remove('mobile-dock-visible', 'mobile-dock-idle');
+          dock.setAttribute('aria-hidden', 'true');
+        }
+        lastScrollY = y;
+        ticking = false;
+      }
+      window.addEventListener('scroll', function() {
+        if (ticking) return;
+        ticking = true;
+        requestAnimationFrame(updateDock);
+      }, { passive: true });
+      window.addEventListener('touchstart', resetIdleTimer, { passive: true });
+      window.addEventListener('touchmove', resetIdleTimer, { passive: true });
+      window.addEventListener('pointerdown', resetIdleTimer);
+      updateDock();
+    })();
+  </script>
+</body>
+</html>
+

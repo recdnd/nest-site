@@ -1,0 +1,2266 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" href="favicon32.png" type="image/png" />
+  <title>死の巣の劇</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Courier+Prime&display=swap');
+    * {
+      box-sizing: border-box;
+    }
+    img {
+      -webkit-user-drag: none;
+      user-select: none;
+    }
+    html, body {
+      width: 100%;
+      overflow-x: hidden;
+    }
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: rgb(222, 222, 222);
+      color: #222;
+      font-family: 'Courier Prime', monospace;
+      min-height: 100vh;
+    }
+    :root {
+      --center-width: 720px;
+      --line-soft: rgba(0, 0, 0, 0.08);
+    }
+    /* 三欄 Twitter 風格佈局：整體居中、無白底、淡線分隔 */
+    .app {
+      min-height: 100vh;
+      max-width: 1160px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 220px minmax(0, var(--center-width)) 1fr;
+    }
+    .left-rail,
+    .right-rail {
+      padding: 24px;
+    }
+    .left-rail {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 16px;
+    }
+    .center {
+      background: transparent;
+      border-left: 1px solid var(--line-soft);
+      border-right: 1px solid var(--line-soft);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    .right-rail {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+    }
+    .top-bar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      padding: 10px 16px;
+      background: transparent;
+      border-bottom: 1px solid var(--line-soft);
+    }
+    .site-title {
+      margin: 0;
+      font-size: 1rem;
+      letter-spacing: 0.08em;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .site-logo {
+      width: 22px;
+      height: 22px;
+      object-fit: contain;
+      flex: 0 0 auto;
+      -webkit-user-drag: none;
+      user-select: none;
+    }
+    /* 作者模式：默認隱藏作者工具，開啟時顯示 */
+    .author-only {
+      display: none !important;
+    }
+    .author-mode .author-only {
+      display: block !important;
+    }
+    .author-flag {
+      margin-left: 8px;
+      font-size: 0.75rem;
+      color: red;
+      vertical-align: middle;
+    }
+    /* 左側 pack list */
+    .pack-list {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .pack-link {
+      background: none;
+      border: none;
+      padding: 4px 0;
+      color: #777;
+      font: inherit;
+      text-align: left;
+      cursor: pointer;
+      transition: color 0.15s ease;
+    }
+    .pack-link:hover,
+    .pack-link.active {
+      color: red;
+    }
+    .left-rec-link {
+      margin-top: 16px;
+      color: #999;
+      text-decoration: none;
+      font-size: 0.85rem;
+      transition: color 0.15s ease;
+    }
+    .left-rec-link:hover {
+      color: red;
+    }
+    /* 中央視圖：上方 tabs + 下方內容 */
+    .gallery-container {
+      flex: 1;
+      padding-bottom: 48px;
+    }
+    .view-tabs {
+      position: sticky;
+      top: 40px;
+      z-index: 15;
+      display: flex;
+      gap: 12px;
+      padding: 8px 16px 0;
+      background: transparent;
+      border-bottom: 1px solid var(--line-soft);
+    }
+    .view-tab {
+      background: none;
+      border: none;
+      padding: 8px 4px;
+      font: inherit;
+      color: #777;
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      transition: color 0.15s ease, border-bottom-color 0.15s ease;
+    }
+    .view-tab.active {
+      color: red;
+      border-bottom-color: red;
+    }
+    .gallery {
+      padding: 8px 16px 16px;
+    }
+    /* Media（三欄 grid） */
+    .gallery-media {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+    }
+    .gallery-media .image-wrapper {
+      position: relative;
+      cursor: pointer;
+      overflow: hidden;
+      aspect-ratio: 1 / 1;
+    }
+    .gallery-media .image-wrapper img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: var(--crop-x, 50%) var(--crop-y, 50%);
+      display: block;
+      border: none;
+      transition: transform 0.25s ease, opacity 0.25s ease;
+    }
+    .gallery-media .image-wrapper .crop-indicator {
+      position: absolute;
+      top: 6px;
+      left: 6px;
+      font-size: 11px;
+      background: rgba(0, 0, 0, 0.6);
+      color: #fff;
+      padding: 2px 6px;
+      border-radius: 4px;
+      pointer-events: none;
+    }
+    .gallery-media .image-wrapper .keep-badge {
+      position: absolute;
+      right: 6px;
+      bottom: 6px;
+      padding: 1px 4px;
+      border-radius: 4px;
+      font-size: 11px;
+      background: rgba(0, 0, 0, 0.35);
+      color: rgba(255, 255, 255, 0.85);
+      opacity: 0.1;
+      pointer-events: none;
+      transition: opacity 0.15s ease;
+    }
+    .gallery-media .image-wrapper:hover .keep-badge {
+      opacity: 1;
+    }
+    .gallery-media .image-wrapper:hover img {
+      transform: scale(1.02);
+      opacity: 0.92;
+    }
+    /* Thread（單欄貼文流） */
+    .gallery-thread {
+      display: flex;
+      flex-direction: column;
+    }
+    .thread-item {
+      padding: 10px 0;
+      border-bottom: 1px solid var(--line-soft);
+    }
+    .thread-meta {
+      font-size: 0.8rem;
+      color: #666;
+      margin: 0 0 4px;
+    }
+    .thread-tags {
+      font-size: 0.8rem;
+      color: #999;
+      margin: 0 0 4px;
+    }
+    .thread-id {
+      font-size: 0.7rem;
+      color: #bbb;
+      margin: 0 0 6px;
+    }
+    .thread-image-wrapper {
+      background: #fff;
+      border-radius: 4px;
+      overflow: hidden;
+      height: 560px;
+      cursor: pointer;
+      position: relative;
+    }
+    .thread-image-wrapper img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: var(--crop-x, 50%) var(--crop-y, 50%);
+      display: block;
+    }
+    .thread-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+      margin-top: 4px;
+    }
+    .thread-action {
+      background: none;
+      border: none;
+      padding: 2px;
+      font-size: 0.8rem;
+      color: #777;
+      cursor: pointer;
+      transition: color 0.15s ease, transform 0.12s ease;
+    }
+    .thread-action:hover {
+      color: red;
+    }
+    .thread-action.like-pulse {
+      color: red;
+      transform: scale(1.06);
+    }
+    /* 移動版 thread：畫廊級完整顯示，橫圖不裁 */
+    @media (max-width: 768px) {
+      .thread-image-wrapper {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: #111;
+        height: auto;
+        min-height: 240px;
+        overflow: hidden;
+        padding: 8px 0;
+        border-radius: 8px;
+      }
+      .thread-image-wrapper img {
+        width: 100%;
+        height: auto;
+        max-height: 85vh;
+        object-fit: contain;
+        object-position: center center;
+        display: block;
+      }
+      .thread-image-wrapper.is-wide img {
+        max-height: 72vh;
+      }
+    }
+    /* 作者模式下：允許拖曳手勢控制裁切，而不是瀏覽器預設手勢 */
+    .author-mode .thread-image-wrapper,
+    .author-mode .gallery-media .image-wrapper {
+      touch-action: none;
+    }
+    /* 小螢幕：只留中間欄；顯示底部 dock 取代左側邊欄 */
+    @media (max-width: 1100px) {
+      .app {
+        grid-template-columns: minmax(0, 1fr);
+      }
+      .left-rail,
+      .right-rail {
+        display: none;
+      }
+      .center {
+        border-left: none;
+        border-right: none;
+      }
+      .view-tabs {
+        top: 0;
+      }
+      /* 移動版底部工具條：半透明紅 ribbon，亮/暗主題略不同；滾動時由 JS 加 .mobile-dock-visible */
+      .mobile-dock {
+        display: flex;
+        position: fixed;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        width: 100%;
+        height: 42px;
+        padding-bottom: env(safe-area-inset-bottom, 0px);
+        align-items: center;
+        justify-content: center;
+        z-index: 100;
+        pointer-events: none;
+        opacity: 0;
+        transform: translateY(100%);
+        transition: transform 180ms ease, opacity 220ms ease;
+        background: linear-gradient(to bottom, rgba(236, 90, 90, 0.86), rgba(221, 80, 80, 0.84));
+      }
+      body.dark .mobile-dock {
+        background: linear-gradient(to bottom, rgba(236, 90, 90, 0.76), rgba(221, 80, 80, 0.74));
+      }
+      .mobile-dock.mobile-dock-visible {
+        pointer-events: auto;
+        transform: translateY(0);
+        opacity: 1;
+      }
+      .mobile-dock.mobile-dock-visible.mobile-dock-idle {
+        opacity: 0.84;
+      }
+      .mobile-dock.mobile-dock-fullscreen-hidden {
+        visibility: hidden;
+        pointer-events: none;
+        opacity: 0;
+      }
+      .mobile-dock.toolbar-sweep::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.15) 50%, transparent 100%);
+        animation: toolbar-sweep 0.15s ease-out forwards;
+        pointer-events: none;
+      }
+      @keyframes toolbar-sweep {
+        0% { transform: translateX(-100%); }
+        100% { transform: translateX(100%); }
+      }
+      .mobile-dock-track {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 12px;
+        overflow-x: auto;
+        overflow-y: hidden;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+        max-width: 100%;
+        padding: 0 12px;
+        flex: 1;
+      }
+      .mobile-dock-track::-webkit-scrollbar {
+        display: none;
+      }
+      .dock-emblem {
+        flex: 0 0 auto;
+        color: rgba(255, 255, 255, 0.96);
+        text-decoration: none;
+        font-size: 1rem;
+        margin-right: 4px;
+        -webkit-tap-highlight-color: transparent;
+      }
+      .dock-emblem:hover {
+        color: #fff;
+      }
+      .dock-item {
+        flex: 0 0 auto;
+        padding: 4px 10px;
+        font: inherit;
+        font-size: 12px;
+        line-height: 1.4;
+        border-radius: 6px;
+        border: none;
+        background: rgba(255, 255, 255, 0.16);
+        color: rgba(255, 255, 255, 0.88);
+        text-decoration: none;
+        cursor: pointer;
+        transition: background 0.12s ease;
+        white-space: nowrap;
+        -webkit-tap-highlight-color: transparent;
+      }
+      .dock-item:hover,
+      .dock-item:active {
+        background: rgba(255, 255, 255, 0.24);
+      }
+      .dock-item.active {
+        color: rgba(255, 255, 255, 0.96);
+        background: rgba(0, 0, 0, 0.18);
+      }
+      .dock-item-rights {
+        background: rgba(255, 255, 255, 0.22);
+        color: rgba(255, 255, 255, 0.92);
+      }
+      .dock-item-rights:hover,
+      .dock-item-rights:active {
+        background: rgba(255, 255, 255, 0.28);
+      }
+      .dock-item-rights.active {
+        color: rgba(255, 255, 255, 0.96);
+        background: rgba(0, 0, 0, 0.20);
+      }
+    }
+    /* 桌面版不顯示 dock */
+    @media (min-width: 1101px) {
+      .mobile-dock {
+        display: none !important;
+      }
+    }
+    .fullscreen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: #0f0f0f;
+      z-index: 1000;
+      display: none;
+      flex-direction: column;
+    }
+    .fullscreen.active {
+      display: flex;
+    }
+    .fullscreen .fullscreen-theme-btn {
+      display: none !important;
+    }
+    .fullscreen-image-container {
+      flex: 1;
+      min-height: 0;
+      min-width: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+    }
+    /* 確保 wrap 是圖片+按鈕的定位容器 */
+    .fullscreen-image-wrap {
+      position: relative;
+      display: inline-block;
+      max-width: 100%;
+      max-height: 100%;
+    }
+    .fullscreen-image-left,
+    .fullscreen-image-right {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 50%;
+      cursor: pointer;
+      z-index: 2;
+      pointer-events: auto;
+    }
+    /* 邊緣細線提示：僅最外側 24px，不遮擋畫面、不 hover 陰影 */
+    .fullscreen-image-left::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 24px;
+      border-left: 1px solid rgba(255, 255, 255, 0.08);
+      pointer-events: none;
+    }
+    .fullscreen-image-right::after {
+      content: '';
+      position: absolute;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      width: 24px;
+      border-right: 1px solid rgba(255, 255, 255, 0.08);
+      pointer-events: none;
+    }
+    .fullscreen-image-left {
+      left: 0;
+    }
+    .fullscreen-image-right {
+      right: 0;
+    }
+    #fullscreenImg {
+      display: block;
+      width: auto;
+      height: auto;
+      max-width: 100vw;
+      max-height: calc(100vh - 52px);
+      object-fit: contain;
+      z-index: 1;
+      position: relative;
+      opacity: 1;
+      filter: grayscale(0) brightness(1);
+      transition: opacity 0.22s ease, filter 0.28s ease;
+    }
+    #fullscreenImg.is-entering {
+      opacity: 0.78;
+      filter: grayscale(0.85) brightness(0.94);
+    }
+    #fullscreenImg.is-ready {
+      opacity: 1;
+      filter: grayscale(0) brightness(1);
+    }
+    /* 全屏操作按鈕：浮在圖片右下角，預設 10% 透明；hover 按鈕本身時加亮 */
+    .fullscreen-download,
+    .fullscreen-share {
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      width: 28px;
+      height: 28px;
+      border: none !important;
+      background: transparent !important;
+      box-shadow: none !important;
+      text-shadow: none !important;
+      padding: 0;
+      line-height: 1;
+      font-size: 14px;
+      color: #ccc;
+      cursor: pointer;
+      opacity: 0.1;
+      pointer-events: auto;
+      transform: none;
+      transition: opacity 0.15s ease;
+      -webkit-tap-highlight-color: transparent;
+      z-index: 4;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .fullscreen-share {
+      right: 27px;
+    }
+    .fullscreen-download:hover,
+    .fullscreen-share:hover {
+      opacity: 0.8;
+    }
+    .fullscreen-download:focus,
+    .fullscreen-download:focus-visible,
+    .fullscreen-share:focus,
+    .fullscreen-share:focus-visible {
+      outline: none !important;
+    }
+    @media (max-width: 768px) {
+      .fullscreen-download,
+      .fullscreen-share {
+        opacity: 0.8;
+        pointer-events: auto;
+      }
+    }
+    .fullscreen-close {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      width: 40px;
+      height: 40px;
+      background: transparent;
+      border: none;
+      color: #ccc;
+      font-size: 1.5rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 3;
+      box-shadow: none;
+      text-shadow: none;
+      outline: none;
+    }
+    .fullscreen-close:hover {
+      color: red;
+      background: transparent;
+      box-shadow: none;
+      outline: none;
+    }
+    .fullscreen-close:focus,
+    .fullscreen-close:focus-visible {
+      outline: none;
+      box-shadow: none;
+    }
+    .fullscreen-metadata {
+      position: absolute;
+      top: 1rem;
+      left: 1rem;
+      z-index: 3;
+      color: #ccc;
+      font-size: 0.875rem;
+      line-height: 1.6;
+      max-width: 50%;
+    }
+    .fullscreen-title {
+      margin-bottom: 0.5rem;
+      font-weight: bold;
+    }
+    .fullscreen-tags {
+      color: #999;
+    }
+    .fullscreen-counter {
+      margin-bottom: 0.5rem;
+      color: #888;
+      font-size: 0.8rem;
+    }
+    .fullscreen-id {
+      margin-top: 0.35rem;
+      font-size: 0.75rem;
+      color: #777;
+      cursor: pointer;
+    }
+    .fullscreen-id:hover {
+      color: #aaa;
+    }
+    @media (max-width: 768px) {
+      .fullscreen-tags.is-collapsed {
+        max-height: 2.8em;
+        overflow: hidden;
+      }
+      .fullscreen-tags-toggle {
+        margin-top: 0.15rem;
+        font-size: 0.75rem;
+        color: #ff00ff;
+        cursor: pointer;
+      }
+      .fullscreen-tags-toggle:hover {
+        color: #ff66ff;
+      }
+    }
+    .copy-toast {
+      position: fixed;
+      left: 50%;
+      bottom: 1.5rem;
+      transform: translateX(-50%);
+      padding: 6px 12px;
+      border-radius: 6px;
+      background: rgba(0, 0, 0, 0.7);
+      color: #fff;
+      font-size: 12px;
+      letter-spacing: 0.03em;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.15s ease;
+      z-index: 1200;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2px;
+    }
+    .copy-toast.visible {
+      opacity: 1;
+    }
+    .copy-toast-line2 {
+      font-size: 11px;
+      opacity: 0.75;
+    }
+    .fullscreen-hint {
+      position: absolute;
+      bottom: 1rem;
+      left: 1rem;
+      color: rgba(255,255,255,0.5);
+      font-size: 0.75rem;
+      pointer-events: none;
+      animation: fullscreenHintFade 2s ease forwards;
+    }
+    @keyframes fullscreenHintFade {
+      0% { opacity: 0; }
+      15% { opacity: 1; }
+      85% { opacity: 1; }
+      100% { opacity: 0; }
+    }
+
+    /* Theme toggle 按鈕（與下載/關閉同區） */
+    .header-btn {
+      font-size: 0.9rem;
+      opacity: 0.7;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 4px 8px;
+      color: inherit;
+      line-height: 1;
+      transition: opacity 0.15s ease;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .header-btn:hover {
+      opacity: 1;
+    }
+    /* R-18 filter：viewer-side toggle；未點亮灰框灰字、點亮紅框紅字、無底色；約 70% 大小、字緊貼外框；固定寬度避免點擊前後位移 */
+    .top-bar-actions {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .r18-toggle {
+      font-size: 9px;
+      padding: 2px 4px;
+      min-width: 32px;
+      height: 18px;
+      border-radius: 4px;
+      border: 1px solid rgba(128, 128, 128, 0.5);
+      background: transparent;
+      color: rgba(128, 128, 128, 0.85);
+      cursor: pointer;
+      text-align: center;
+      line-height: 1;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      box-sizing: border-box;
+    }
+    .r18-toggle:hover {
+      border-color: rgba(128, 128, 128, 0.7);
+      color: rgba(128, 128, 128, 1);
+    }
+    .r18-toggle.active {
+      border-color: rgba(230, 85, 85, 0.72);
+      color: rgba(230, 85, 85, 0.92);
+      background: transparent;
+    }
+    .r18-toggle.active:hover {
+      border-color: rgba(230, 85, 85, 0.9);
+      color: rgba(230, 85, 85, 1);
+    }
+    body.dark .r18-toggle {
+      border-color: rgba(160, 160, 160, 0.45);
+      color: rgba(160, 160, 160, 0.85);
+    }
+    body.dark .r18-toggle:hover {
+      border-color: rgba(160, 160, 160, 0.65);
+      color: rgba(160, 160, 160, 1);
+    }
+    body.dark .r18-toggle.active {
+      border-color: rgba(230, 85, 85, 0.72);
+      color: rgba(230, 85, 85, 0.92);
+      background: transparent;
+    }
+    body.dark .r18-toggle.active:hover {
+      border-color: rgba(230, 85, 85, 0.9);
+      color: rgba(230, 85, 85, 1);
+    }
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .top-bar .top-bar-actions {
+      flex-shrink: 0;
+    }
+    .fullscreen-theme-btn {
+      position: absolute;
+      top: 1rem;
+      right: 3.25rem;
+      z-index: 3;
+      color: #ccc;
+    }
+    .fullscreen-theme-btn:hover {
+      color: #fff;
+    }
+    body.dark .fullscreen-theme-btn {
+      color: #888;
+    }
+    body.dark .fullscreen-theme-btn:hover {
+      color: #ddd;
+    }
+
+    /* Dark mode */
+    body.dark {
+      background: #111;
+      color: #ddd;
+    }
+    body.dark .center,
+    body.dark .top-bar,
+    body.dark .view-tabs {
+      border-color: #333;
+    }
+    body.dark .thread-item {
+      border-bottom-color: #333;
+    }
+    body.dark .thread-meta {
+      color: #aaa;
+    }
+    body.dark .thread-tags {
+      color: #888;
+    }
+    body.dark .pack-link {
+      color: #888;
+    }
+    body.dark .pack-link:hover,
+    body.dark .pack-link.active {
+      color: #e55;
+    }
+    body.dark .left-rec-link {
+      color: #777;
+    }
+    body.dark .left-rec-link:hover {
+      color: #e55;
+    }
+    body.dark .view-tab {
+      color: #888;
+    }
+    body.dark .view-tab.active {
+      color: #e55;
+      border-bottom-color: #e55;
+    }
+    body.dark .fullscreen-metadata,
+    body.dark .fullscreen-title,
+    body.dark .fullscreen-tags {
+      color: #aaa;
+    }
+    body.dark .fullscreen-counter {
+      color: #888;
+    }
+    body.dark .fullscreen-close {
+      color: #888;
+    }
+    body.dark .fullscreen-close:hover {
+      color: #e55;
+    }
+    body.dark .fullscreen-download,
+    body.dark .fullscreen-share {
+      color: #888;
+    }
+    body.dark .fullscreen-image-wrap:hover .fullscreen-download,
+    body.dark .fullscreen-image-wrap:hover .fullscreen-share,
+    body.dark .fullscreen-download:hover,
+    body.dark .fullscreen-share:hover {
+      color: #ddd;
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <aside class="left-rail">
+      <nav class="pack-list" id="packList"></nav>
+      <button type="button" class="left-rec-link author-only" id="exportCropsBtn" style="background:none;border:none;cursor:pointer;margin-top:8px;">/export-crops</button>
+      <a href="https://rec.ooo" class="left-rec-link" title="rec.ooo" target="_blank" rel="noopener">/[𝓡::主權主鏈]</a>
+      <a href="./rights.html" class="left-rec-link" title="Rights / NASL">/rights</a>
+    </aside>
+    <main class="center">
+      <header class="top-bar">
+        <h1 class="site-title">
+          <img src="./rose.png" alt="" class="site-logo" />
+          死の巣の劇 <span class="author-flag author-only">(author)</span>
+        </h1>
+        <div class="top-bar-actions">
+          <button type="button" id="r18-toggle" class="r18-toggle" title="toggle R-18 artworks">R-18</button>
+          <button type="button" id="themeToggle" class="header-btn" title="深色模式">🌑</button>
+        </div>
+      </header>
+      <div class="gallery-container">
+        <div class="view-tabs">
+          <button type="button" class="view-tab" id="tabThread" data-mode="thread">Thread</button>
+          <button type="button" class="view-tab active" id="tabMedia" data-mode="media">Media</button>
+        </div>
+        <div class="gallery" id="gallery"></div>
+      </div>
+    </main>
+    <aside class="right-rail"></aside>
+  </div>
+
+  <div class="fullscreen" id="fullscreen">
+    <div class="fullscreen-image-container">
+      <div class="fullscreen-image-left" id="fullscreenLeft"></div>
+      <div class="fullscreen-image-right" id="fullscreenRight"></div>
+      <div class="fullscreen-image-wrap">
+        <img id="fullscreenImg" src="" alt="" />
+        <button type="button" class="fullscreen-share" id="fullscreenShare" title="複製連結">🔗</button>
+        <button type="button" class="fullscreen-download" id="fullscreenDownload" title="下載">⏬</button>
+      </div>
+      <div class="fullscreen-close" id="fullscreenClose">×</div>
+      <button type="button" id="themeToggleFullscreen" class="header-btn fullscreen-theme-btn" title="深色模式">🌑</button>
+      <div class="fullscreen-metadata" id="fullscreenMetadata"></div>
+    </div>
+  </div>
+
+  <div class="mobile-dock" id="mobileDock" aria-hidden="true">
+    <div class="mobile-dock-track" id="mobileDockTrack"></div>
+  </div>
+
+  <script>
+    let siteData = null;
+    let currentPackId = null;
+    let currentItemsAll = [];
+    let currentItems = [];
+    let currentIndex = -1;
+    let r18Enabled = localStorage.getItem('r18') === '1';
+    let preloadedImages = new Map();
+    let viewMode = 'media'; // 'media' or 'thread'
+    let initialArtId = null;
+    // URL 參數：允許 ?pack= / ?art= 深連結
+    (function initFromUrl() {
+      try {
+        const params = new URLSearchParams(window.location.search || '');
+        const packFromUrl = params.get('pack');
+        const artFromUrl = params.get('art');
+        if (packFromUrl) {
+          currentPackId = packFromUrl;
+        }
+        if (artFromUrl) {
+          initialArtId = artFromUrl;
+        }
+      } catch (e) {
+        // ignore
+      }
+    })();
+
+    // Local keep（like）計數：per artId，存在 localStorage
+    const KEEP_STORE_KEY = 'nest_keep_counts_v1';
+    let keepCounts = {};
+    try {
+      keepCounts = JSON.parse(localStorage.getItem(KEEP_STORE_KEY) || '{}') || {};
+    } catch {
+      keepCounts = {};
+    }
+    function getKeepCount(artId) {
+      if (!artId) return 0;
+      return keepCounts[artId] || 0;
+    }
+    function saveKeepCounts() {
+      try {
+        localStorage.setItem(KEEP_STORE_KEY, JSON.stringify(keepCounts));
+      } catch {
+        // ignore
+      }
+    }
+    function incrementKeepCount(artId) {
+      if (!artId) return 0;
+      const current = keepCounts[artId] || 0;
+      const next = current + 1;
+      keepCounts[artId] = next;
+      saveKeepCounts();
+      return next;
+    }
+
+    // ===== Author Mode (hidden tools) =====
+    let authorMode = false;
+
+    function setAuthorMode(on) {
+      authorMode = !!on;
+      document.documentElement.classList.toggle('author-mode', authorMode);
+    }
+
+    const CROP_PRESETS = [
+      { name: 'center', x: 50, y: 50 },
+      { name: 'top', x: 50, y: 20 },
+      { name: 'top10', x: 50, y: 10 }
+    ];
+    const CROP_SCROLL_SPEED = 2;
+    const cropStoreKey = 'gallery_crop_overrides_v1';
+    let cropOverrides = {};
+    try {
+      cropOverrides = JSON.parse(localStorage.getItem(cropStoreKey) || '{}');
+    } catch {
+      cropOverrides = {};
+    }
+
+    function getCropKey(item) {
+      return (currentPackId || '') + '/' + (item.originalFile || item.file || item.src || '');
+    }
+
+    function applyCrop(imgEl, item) {
+      const key = getCropKey(item);
+      const crop = cropOverrides[key] || item.crop;
+      if (!crop || crop.x == null || crop.y == null) {
+        imgEl.style.removeProperty('--crop-x');
+        imgEl.style.removeProperty('--crop-y');
+        return;
+      }
+      imgEl.style.setProperty('--crop-x', crop.x + '%');
+      imgEl.style.setProperty('--crop-y', crop.y + '%');
+    }
+
+    function getCropLabel(crop) {
+      if (!crop) return '';
+      const p = CROP_PRESETS.find(p => Math.abs(p.x - (crop.x || 50)) < 1 && Math.abs(p.y - (crop.y || 50)) < 1);
+      return p ? p.name : 'y=' + Math.round(crop.y || 50) + '%';
+    }
+
+    function updateCropIndicator(indicatorEl, item) {
+      const key = getCropKey(item);
+      const crop = cropOverrides[key] || item.crop;
+      const label = getCropLabel(crop);
+      indicatorEl.textContent = label || '';
+      indicatorEl.style.display = (label && label !== 'center') ? 'block' : 'none';
+    }
+
+    function cycleCrop(item, imgEl, indicatorEl) {
+      const key = getCropKey(item);
+      const cur = cropOverrides[key] || item.crop || { x: 50, y: 50 };
+      const idx = CROP_PRESETS.findIndex(p => Math.abs(p.x - cur.x) < 1 && Math.abs(p.y - cur.y) < 1);
+      const next = CROP_PRESETS[(idx + 1) % CROP_PRESETS.length];
+      cropOverrides[key] = { x: next.x, y: next.y };
+      localStorage.setItem(cropStoreKey, JSON.stringify(cropOverrides));
+      applyCrop(imgEl, item);
+      if (indicatorEl) updateCropIndicator(indicatorEl, item);
+    }
+
+    function adjustCropScroll(item, imgEl, deltaY, indicatorEl) {
+      const key = getCropKey(item);
+      const cur = cropOverrides[key] || item.crop || { x: 50, y: 50 };
+      let newY = cur.y + (deltaY > 0 ? CROP_SCROLL_SPEED : -CROP_SCROLL_SPEED);
+      newY = Math.max(0, Math.min(100, newY));
+      const next = { x: cur.x != null ? cur.x : 50, y: newY };
+      cropOverrides[key] = next;
+      localStorage.setItem(cropStoreKey, JSON.stringify(cropOverrides));
+      applyCrop(imgEl, item);
+      if (indicatorEl) updateCropIndicator(indicatorEl, item);
+    }
+
+    function exportCrops() {
+      const blob = new Blob([JSON.stringify(cropOverrides, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'crop-overrides.json';
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    }
+
+    // 綁定裁切編輯行為（Media/Thread 共用）
+    function bindCropEditing(imgEl, item, indicatorEl, onOpenFullscreen) {
+      // 禁止瀏覽器拖拽影子
+      imgEl.setAttribute('draggable', 'false');
+      imgEl.addEventListener('dragstart', (e) => e.preventDefault());
+
+      // 點擊：作者模式 = 切換裁切；一般模式 = 開啟全屏
+      imgEl.addEventListener('click', (e) => {
+        if (!authorMode) {
+          if (typeof onOpenFullscreen === 'function') {
+            onOpenFullscreen(e);
+          }
+          return;
+        }
+        e.preventDefault();
+        e.stopPropagation();
+        cycleCrop(item, imgEl, indicatorEl || null);
+      }, { capture: true });
+
+      // 滾輪：作者模式下微調 y
+      imgEl.addEventListener('wheel', (e) => {
+        if (!authorMode) return;
+        e.preventDefault();
+        e.stopPropagation();
+        adjustCropScroll(item, imgEl, e.deltaY, indicatorEl || null);
+      }, { passive: false, capture: true });
+    }
+
+    // 作者模式下：拖曳圖片上下以連續調整裁切 y
+    function bindCropDrag(wrapperEl, imgEl, item, indicatorEl) {
+      let dragging = false;
+      let startClientY = 0;
+      let startCropY = 50;
+
+      function getCurrentCrop() {
+        const key = getCropKey(item);
+        return cropOverrides[key] || item.crop || { x: 50, y: 50 };
+      }
+
+      function setCropY(newY) {
+        const key = getCropKey(item);
+        const cur = getCurrentCrop();
+        const next = {
+          x: cur.x != null ? cur.x : 50,
+          y: Math.max(0, Math.min(100, newY))
+        };
+        cropOverrides[key] = next;
+        localStorage.setItem(cropStoreKey, JSON.stringify(cropOverrides));
+        applyCrop(imgEl, item);
+        if (indicatorEl) updateCropIndicator(indicatorEl, item);
+      }
+
+      wrapperEl.addEventListener('pointerdown', (e) => {
+        if (!authorMode) return;
+        if (e.pointerType === 'mouse' && e.button !== 0) return;
+        e.preventDefault();
+        e.stopPropagation();
+
+        dragging = true;
+        startClientY = e.clientY;
+        startCropY = getCurrentCrop().y ?? 50;
+        try {
+          wrapperEl.setPointerCapture(e.pointerId);
+        } catch {}
+      }, { capture: true });
+
+      wrapperEl.addEventListener('pointermove', (e) => {
+        if (!authorMode || !dragging) return;
+        e.preventDefault();
+        e.stopPropagation();
+        const rect = wrapperEl.getBoundingClientRect();
+        const dy = e.clientY - startClientY;
+        const deltaPct = (dy / Math.max(1, rect.height)) * 100;
+        setCropY(startCropY + deltaPct);
+      }, { capture: true });
+
+      function endDrag(e) {
+        if (!dragging) return;
+        dragging = false;
+        if (e) {
+          try {
+            wrapperEl.releasePointerCapture(e.pointerId);
+          } catch {}
+        }
+      }
+
+      wrapperEl.addEventListener('pointerup', endDrag, { capture: true });
+      wrapperEl.addEventListener('pointercancel', endDrag, { capture: true });
+      wrapperEl.addEventListener('pointerleave', (e) => {
+        if (dragging && e.pointerType === 'mouse') endDrag(e);
+      }, { capture: true });
+    }
+
+    // ===== Permalink / ID helpers =====
+    const GENERIC_SUFFIXES = new Set([
+      'signed', 'out', 'ext', 'pf-ext', 'pf', 'crop', 'final', 'ver2', 'v2',
+      'qq-ext', 'x-ext', 'line'
+    ]);
+
+    function normalizeFileStem(originalFile) {
+      if (!originalFile) return '';
+      const name = originalFile.split('/').pop() || '';
+      return name.replace(/\.[^/.]+$/, '');
+    }
+
+    function extractSemanticSlug(originalFile) {
+      const stem = normalizeFileStem(originalFile);
+      if (!stem) return 'art';
+      const parts = stem.split('__');
+      if (parts.length === 1) return stem.toLowerCase();
+      const dateLike = /^\d{8}$/;
+      for (let i = 0; i < parts.length; i++) {
+        const raw = parts[i];
+        if (!raw) continue;
+        const lower = raw.toLowerCase();
+        if (i === 0 && dateLike.test(lower)) continue;
+        if (GENERIC_SUFFIXES.has(lower)) continue;
+        return lower;
+      }
+      return 'art';
+    }
+
+    function shortHash(input, len) {
+      let h = 0;
+      const str = String(input || '');
+      for (let i = 0; i < str.length; i++) {
+        h = (h * 31 + str.charCodeAt(i)) | 0;
+      }
+      let n = Math.abs(h);
+      let out = n.toString(36);
+      if (out.length < len) out = out.padStart(len, '0');
+      return out.slice(0, len);
+    }
+
+    function buildArtId(originalFile, usedIds) {
+      const baseSlug = extractSemanticSlug(originalFile);
+      const key = originalFile || baseSlug;
+      let length = 4;
+      let candidate = '';
+      while (length <= 8) {
+        const suffix = shortHash(key, length);
+        candidate = `${baseSlug}-${suffix}`;
+        if (!usedIds.has(candidate)) return candidate;
+        length += 1;
+      }
+      // 極端情況：再加一位保險
+      let counter = 0;
+      while (true) {
+        const suffix = shortHash(key + ':' + counter, 8);
+        candidate = `${baseSlug}-${suffix}`;
+        if (!usedIds.has(candidate)) return candidate;
+        counter += 1;
+      }
+    }
+
+    function buildArtworkCitation(artId, packLabel) {
+      const base = '死の巣の劇';
+      if (packLabel) return `${base} / ${packLabel} / ${artId}`;
+      return `${base} / ${artId}`;
+    }
+
+    function updateUrlForArtwork(item) {
+      if (!window.history || !window.history.replaceState || !item) return;
+      const params = new URLSearchParams(window.location.search || '');
+      if (currentPackId) params.set('pack', currentPackId);
+      if (item.artId) params.set('art', item.artId);
+      const qs = params.toString();
+      const newUrl = window.location.pathname + (qs ? '?' + qs : '');
+      window.history.replaceState({}, '', newUrl);
+    }
+
+    function updateUrlForPackOnly() {
+      if (!window.history || !window.history.replaceState) return;
+      const params = new URLSearchParams(window.location.search || '');
+      if (currentPackId) {
+        params.set('pack', currentPackId);
+      } else {
+        params.delete('pack');
+      }
+      params.delete('art');
+      const qs = params.toString();
+      const newUrl = window.location.pathname + (qs ? '?' + qs : '');
+      window.history.replaceState({}, '', newUrl);
+    }
+
+    function openFullscreenByArtId(artId) {
+      if (!artId || !Array.isArray(currentItems) || currentItems.length === 0) return;
+      const index = currentItems.findIndex(item => item.artId === artId);
+      if (index === -1) return;
+      openFullscreen(index);
+    }
+
+    // Load site.json（帶 cache-bust 避免快取舊的圖集列表）
+    async function loadSite() {
+      const res = await fetch('./site.json?t=' + Date.now());
+      siteData = await res.json();
+      
+      // 若 URL 給的 pack 不存在，退回預設
+      if (currentPackId && !siteData.packs.find(p => p.id === currentPackId)) {
+        currentPackId = null;
+      }
+      
+      // Determine default pack
+      if (!currentPackId) {
+        if (siteData.defaultPack && siteData.packs.find(p => p.id === siteData.defaultPack)) {
+          currentPackId = siteData.defaultPack;
+        } else {
+          const sorted = [...siteData.packs].sort((a, b) => b.priority - a.priority);
+          currentPackId = sorted[0]?.id;
+        }
+      }
+      
+      renderPackList();
+      await loadPack(currentPackId);
+    }
+
+    // Render pack list（左側 /pack list）
+    function renderPackList() {
+      const container = document.getElementById('packList');
+      if (!container || !siteData) return;
+      container.innerHTML = '';
+      const sorted = [...siteData.packs].sort((a, b) => b.priority - a.priority);
+      sorted.forEach(pack => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'pack-link' + (pack.id === currentPackId ? ' active' : '');
+        btn.textContent = `/${pack.label}`;
+        btn.onclick = () => switchPack(pack.id);
+        container.appendChild(btn);
+      });
+      renderMobileDock();
+    }
+
+    // 移動版底部工具條：𝓡 標誌 + pack（無 / 前綴）+ rights，橫向可滑動
+    function renderMobileDock() {
+      const track = document.getElementById('mobileDockTrack');
+      if (!track || !siteData) return;
+      track.innerHTML = '';
+      const home = document.createElement('a');
+      home.href = 'https://rec.ooo';
+      home.target = '_blank';
+      home.rel = 'noopener';
+      home.className = 'dock-emblem';
+      home.title = 'rec.ooo';
+      home.textContent = '𝓡';
+      track.appendChild(home);
+      const sorted = [...siteData.packs].sort((a, b) => b.priority - a.priority);
+      sorted.forEach(pack => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'dock-item' + (pack.id === currentPackId ? ' active' : '');
+        btn.textContent = pack.label;
+        btn.onclick = () => switchPack(pack.id);
+        track.appendChild(btn);
+      });
+      const rights = document.createElement('a');
+      rights.href = './rights.html';
+      rights.className = 'dock-item dock-item-rights';
+      rights.title = 'Rights / NASL';
+      rights.textContent = 'rights';
+      track.appendChild(rights);
+    }
+
+    // Load pack manifest and order.txt；opts.sweep = 僅在切換 pack 時於移動版工具條播放掃光
+    async function loadPack(packId, opts) {
+      currentPackId = packId;
+      
+      // Close fullscreen if open
+      closeFullscreen();
+      
+      // Load manifest（帶 cache-bust 以取得最新 tags 等）
+      const manifestRes = await fetch(`./packs/${packId}/manifest.json?t=${Date.now()}`);
+      const manifest = await manifestRes.json();
+      
+      // Load order.txt if exists
+      let orderLines = null;
+      try {
+        const orderRes = await fetch(`./packs/${packId}/order.txt`);
+        if (orderRes.ok) {
+          const orderText = await orderRes.text();
+          orderLines = orderText.split('\n')
+            .map(line => line.trim())
+            .filter(line => line.length > 0);
+        }
+      } catch (e) {
+        // order.txt doesn't exist, that's fine
+      }
+      
+      // Resolve items with ordering and set metadata；R-18 由 viewer filter 決定是否顯示
+      currentItemsAll = resolveEffectiveItems(manifest, orderLines);
+      currentItems = getFilteredItems();
+      
+      if (initialArtId) {
+        openFullscreenByArtId(initialArtId);
+        initialArtId = null;
+      } else {
+        updateUrlForPackOnly();
+      }
+      
+      renderCurrentView();
+      renderPackList();
+      if (opts && opts.sweep && window.innerWidth <= 1100) {
+        const dock = document.getElementById('mobileDock');
+        if (dock) {
+          dock.classList.remove('toolbar-sweep');
+          void dock.offsetWidth;
+          dock.classList.add('toolbar-sweep');
+          setTimeout(() => dock.classList.remove('toolbar-sweep'), 150);
+        }
+      }
+    }
+
+    function getFilteredItems() {
+      if (!currentItemsAll.length) return [];
+      const base = r18Enabled
+        ? [...currentItemsAll]
+        : currentItemsAll.filter(item => !(item.tags && item.tags.includes('R-18')));
+      // 依 keep 次數排序：多的在前，平手時維持原始順序
+      base.sort((a, b) => {
+        const ca = getKeepCount(a.artId);
+        const cb = getKeepCount(b.artId);
+        if (cb !== ca) return cb - ca;
+        return (a._originalOrder || 0) - (b._originalOrder || 0);
+      });
+      return base;
+    }
+
+    // Resolve items with ordering and set metadata
+    function resolveEffectiveItems(manifest, orderLines) {
+      const { items, sets } = manifest;
+      const itemsMap = new Map();
+      const itemsByBasename = new Map();
+      const usedIds = new Set();
+      const packLabel = manifest.label || manifest.packId || '';
+      
+      // Build maps: file -> item, and basename -> item (for flexible matching)
+      items.forEach(item => {
+        itemsMap.set(item.file, item);
+        const basename = item.file.split('/').pop();
+        if (!itemsByBasename.has(basename)) {
+          itemsByBasename.set(basename, item);
+        }
+      });
+      
+      // Apply ordering
+      let orderedItems = [];
+      
+      if (orderLines && orderLines.length > 0) {
+        // Use order.txt as authoritative
+        const orderedSet = new Set();
+        orderLines.forEach(line => {
+          const file = line.trim();
+          let item = null;
+          
+          // Try exact match first
+          if (itemsMap.has(file)) {
+            item = itemsMap.get(file);
+          } else {
+            // Try basename match
+            const basename = file.split('/').pop();
+            if (itemsByBasename.has(basename)) {
+              item = itemsByBasename.get(basename);
+            }
+          }
+          
+          if (item) {
+            orderedItems.push(item);
+            orderedSet.add(item.file);
+          }
+        });
+        // Append missing files (deterministic: sort by filename)
+        const missing = items
+          .filter(item => !orderedSet.has(item.file))
+          .sort((a, b) => a.file.localeCompare(b.file));
+        orderedItems.push(...missing);
+      } else {
+        // Sort by index or filename
+        orderedItems = [...items].sort((a, b) => {
+          if (a.index !== undefined && b.index !== undefined) {
+            return a.index - b.index;
+          }
+          if (a.index !== undefined) return -1;
+          if (b.index !== undefined) return 1;
+          return a.file.localeCompare(b.file);
+        });
+      }
+      
+      // 組圖共用 tags：若 set 有寫 tags 則只認一套（manifest 只寫一次）；否則合併 set + 組內所有 item 的 tags
+      const setTagsMap = new Map();
+      const setIds = [...new Set(orderedItems.map(i => i.set).filter(Boolean))];
+      setIds.forEach(setId => {
+        const setData = sets && sets[setId] ? sets[setId] : null;
+        if (setData?.tags && Array.isArray(setData.tags) && setData.tags.length > 0) {
+          setTagsMap.set(setId, [...setData.tags]);
+        } else {
+          const tagSet = new Set();
+          const list = [];
+          if (setData?.tags) setData.tags.forEach(t => { if (!tagSet.has(t)) { tagSet.add(t); list.push(t); } });
+          orderedItems.filter(i => i.set === setId).forEach(item => {
+            if (item.tags) item.tags.forEach(t => { if (!tagSet.has(t)) { tagSet.add(t); list.push(t); } });
+          });
+          setTagsMap.set(setId, list);
+        }
+      });
+      
+      // Resolve effective title and tags with set merge，並附加 artId / citationLabel / _originalOrder
+      return orderedItems.map((item, index) => {
+        const setId = item.set;
+        const setData = setId && sets && sets[setId] ? sets[setId] : null;
+        
+        const effectiveTitle = item.title ?? (setData?.title ?? null);
+        
+        const effectiveTags = setId && setTagsMap.has(setId)
+          ? setTagsMap.get(setId)
+          : (() => {
+              const tagSet = new Set();
+              const out = [];
+              if (setData?.tags) setData.tags.forEach(tag => { if (!tagSet.has(tag)) { tagSet.add(tag); out.push(tag); } });
+              if (item.tags) item.tags.forEach(tag => { if (!tagSet.has(tag)) { tagSet.add(tag); out.push(tag); } });
+              return out;
+            })();
+        const artId = buildArtId(item.file, usedIds);
+        usedIds.add(artId);
+        const citationLabel = buildArtworkCitation(artId, packLabel);
+        const encodedFile = item.file.split('/').map(encodeURIComponent).join('/');
+        return {
+          src: `./${manifest.packId}/${encodedFile}`,
+          title: effectiveTitle,
+          tags: effectiveTags,
+          set: setId,
+          originalFile: item.file,
+          crop: item.crop,
+          artId,
+          citationLabel,
+          _originalOrder: index
+        };
+      });
+    }
+
+    // 依目前模式渲染（media / thread）
+    function renderCurrentView() {
+      if (viewMode === 'thread') {
+        renderThread();
+      } else {
+        renderMedia();
+      }
+    }
+
+    // Media：三欄 grid（編組時只顯示組內第一張縮圖，點開全屏可左右切換看組內其他張）
+    function renderMedia() {
+      const gallery = document.getElementById('gallery');
+      if (!gallery) return;
+      gallery.innerHTML = '';
+      gallery.className = 'gallery gallery-media';
+      const setFirstShown = new Set();
+      
+      currentItems.forEach((item, index) => {
+        if (item.set && setFirstShown.has(item.set)) return;
+        if (item.set) setFirstShown.add(item.set);
+        
+        const wrapper = document.createElement('div');
+        wrapper.className = 'image-wrapper';
+        if (item.artId) wrapper.dataset.artId = item.artId;
+        const indicator = document.createElement('div');
+        indicator.className = 'crop-indicator author-only';
+        wrapper.appendChild(indicator);
+        const img = document.createElement('img');
+        img.src = item.src;
+        img.alt = '';
+        img.loading = 'lazy';
+        wrapper.appendChild(img);
+        applyCrop(img, item);
+        updateCropIndicator(indicator, item);
+        bindCropEditing(img, item, indicator, () => openFullscreen(index));
+
+        // keep badge（僅在有 keep 次數時顯示）
+        const keepCount = getKeepCount(item.artId);
+        const keepBadge = document.createElement('div');
+        keepBadge.className = 'keep-badge';
+        keepBadge.textContent = keepCount + '👍';
+        if (!keepCount) {
+          keepBadge.style.display = 'none';
+        }
+        wrapper.appendChild(keepBadge);
+
+        gallery.appendChild(wrapper);
+      });
+      
+      preloadAdjacent(0);
+    }
+
+    // 由檔名解析日期（YYYYMMDD 開頭）
+    function getDateFromOriginalFile(originalFile) {
+      if (!originalFile) return '';
+      const m = originalFile.match(/^(\d{4})(\d{2})(\d{2})/);
+      if (!m) return '';
+      const [, y, mo, d] = m;
+      return `${y}-${mo}-${d}`;
+    }
+
+    function getCurrentPackLabel() {
+      if (!siteData || !siteData.packs) return '';
+      const p = siteData.packs.find(p => p.id === currentPackId);
+      return p ? p.label : '';
+    }
+
+    function buildPermalinkForItem(item) {
+      if (!item || !item.artId) return window.location.href;
+      const params = new URLSearchParams();
+      if (currentPackId) params.set('pack', currentPackId);
+      params.set('art', item.artId);
+      const qs = params.toString();
+      return window.location.origin + window.location.pathname + (qs ? '?' + qs : '');
+    }
+
+    let copyToastTimer = null;
+    function showCopyFeedback() {
+      let toast = document.getElementById('copyToast');
+      if (!toast) {
+        toast = document.createElement('div');
+        toast.id = 'copyToast';
+        toast.className = 'copy-toast';
+        document.body.appendChild(toast);
+      }
+      toast.innerHTML = '<span>Link copied</span><span class="copy-toast-line2">✎ theatre opened</span>';
+      toast.classList.add('visible');
+      if (copyToastTimer) clearTimeout(copyToastTimer);
+      copyToastTimer = setTimeout(() => {
+        toast.classList.remove('visible');
+      }, 1200);
+    }
+
+    function copyTextToClipboard(text) {
+      if (!text) return;
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(showCopyFeedback).catch(() => {});
+      } else {
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.focus();
+        ta.select();
+        try {
+          document.execCommand('copy');
+        } catch {}
+        document.body.removeChild(ta);
+        showCopyFeedback();
+      }
+    }
+
+    function copyPermalink(item) {
+      const url = buildPermalinkForItem(item);
+      const templates = [
+        '✎: 劇✯場✯開✯幕⟢<link>⟣',
+        '✎: 巣✯中✯展✯示⟢<link>⟣',
+        '✎: 標✯本✯解✯封⟢<link>⟣',
+        '✎: 記✯録✯断✯片⟢<link>⟣',
+        '✎: 観✯測✯開✯始⟢<link>⟣',
+        '✎: 巣✯穴✯発✯見⟢<link>⟣',
+        '✎: 収✯蔵✯標✯本⟢<link>⟣',
+        '✎: 異✯形✯収✯集⟢<link>⟣',
+        '✎: 舞✯台✯再✯生⟢<link>⟣'
+      ];
+      const tpl = templates[Math.floor(Math.random() * templates.length)];
+      const text = tpl.replace('<link>', url);
+      copyTextToClipboard(text);
+    }
+
+    function attachFullscreenIdCopyHandler() {
+      const meta = document.getElementById('fullscreenMetadata');
+      if (!meta) return;
+      const idEl = meta.querySelector('.fullscreen-id');
+      if (!idEl) return;
+      idEl.onclick = function(e) {
+        e.stopPropagation();
+        e.preventDefault();
+        const citation = idEl.getAttribute('data-citation') || idEl.textContent || '';
+        copyTextToClipboard(citation);
+      };
+    }
+
+    function enhanceFullscreenTags() {
+      // 僅在手機尺寸下需要折疊，桌面直接顯示全部
+      if (!(window.matchMedia && window.matchMedia('(max-width: 768px)').matches)) return;
+      const meta = document.getElementById('fullscreenMetadata');
+      if (!meta) return;
+      const tagsEl = meta.querySelector('.fullscreen-tags');
+      if (!tagsEl) return;
+      // 依 tag 數量決定是否需要 more/less
+      const text = tagsEl.textContent || '';
+      const allTags = text.split(/\s+/).filter(Boolean);
+      const threshold = 6;
+      if (allTags.length <= threshold) return;
+
+      tagsEl.classList.add('is-collapsed');
+      let toggle = meta.querySelector('.fullscreen-tags-toggle');
+      if (!toggle) {
+        toggle = document.createElement('div');
+        toggle.className = 'fullscreen-tags-toggle';
+        meta.appendChild(toggle);
+      }
+      const extra = allTags.length - threshold;
+      function updateToggleLabel() {
+        if (tagsEl.classList.contains('is-collapsed')) {
+          toggle.textContent = extra > 0 ? `+${extra} more` : 'more';
+        } else {
+          toggle.textContent = 'less';
+        }
+      }
+      updateToggleLabel();
+      toggle.onclick = function(e) {
+        e.stopPropagation();
+        e.preventDefault();
+        tagsEl.classList.toggle('is-collapsed');
+        updateToggleLabel();
+      };
+    }
+
+    // Thread：單欄貼文流
+    function renderThread() {
+      const gallery = document.getElementById('gallery');
+      if (!gallery) return;
+      gallery.innerHTML = '';
+      gallery.className = 'gallery gallery-thread';
+      const setFirstShown = new Set();
+      const packLabel = getCurrentPackLabel();
+      
+      currentItems.forEach((item, index) => {
+        if (item.set && setFirstShown.has(item.set)) return;
+        if (item.set) setFirstShown.add(item.set);
+        
+        const card = document.createElement('article');
+        card.className = 'thread-item';
+        if (item.artId) card.dataset.artId = item.artId;
+        
+        const dateStr = getDateFromOriginalFile(item.originalFile);
+        const metaPieces = [];
+        if (dateStr) metaPieces.push(dateStr);
+        if (packLabel) metaPieces.push(packLabel);
+        if (item.title) metaPieces.push(item.title);
+        const meta = document.createElement('div');
+        meta.className = 'thread-meta';
+        meta.textContent = metaPieces.join(' · ');
+        card.appendChild(meta);
+        
+        if (item.tags && Array.isArray(item.tags) && item.tags.length > 0) {
+          const tagsDiv = document.createElement('div');
+          tagsDiv.className = 'thread-tags';
+          tagsDiv.textContent = item.tags.map(formatTag).join(' ');
+          card.appendChild(tagsDiv);
+        }
+        if (item.artId) {
+          const idDiv = document.createElement('div');
+          idDiv.className = 'thread-id';
+          idDiv.textContent = '#' + item.artId;
+          card.appendChild(idDiv);
+        }
+        
+        const imgWrap = document.createElement('div');
+        imgWrap.className = 'thread-image-wrapper';
+        const img = document.createElement('img');
+        img.src = item.src;
+        img.alt = '';
+        img.loading = 'lazy';
+        applyCrop(img, item);
+        imgWrap.appendChild(img);
+        // 依寬高比標記，供移動版畫廊級 contain 樣式使用
+        img.addEventListener('load', function onThreadImgLoad() {
+          const w = img.naturalWidth, h = img.naturalHeight;
+          if (!w || !h) return;
+          const ratio = w / h;
+          if (ratio > 1.15) imgWrap.classList.add('is-wide');
+          else if (ratio < 0.85) imgWrap.classList.add('is-tall');
+          else imgWrap.classList.add('is-squareish');
+        });
+        if (img.complete && img.naturalWidth) {
+          const w = img.naturalWidth, h = img.naturalHeight;
+          if (w && h) {
+            const ratio = w / h;
+            if (ratio > 1.15) imgWrap.classList.add('is-wide');
+            else if (ratio < 0.85) imgWrap.classList.add('is-tall');
+            else imgWrap.classList.add('is-squareish');
+          }
+        }
+
+        // Thread 視圖：作者模式下可拖曳/點擊編輯裁切；一般模式點擊開全屏
+        imgWrap.onclick = (e) => {
+          if (authorMode) {
+            e.preventDefault();
+            e.stopPropagation();
+            cycleCrop(item, img, null);
+            return;
+          }
+          openFullscreen(index);
+        };
+        imgWrap.addEventListener('wheel', (e) => {
+          if (!authorMode) return;
+          e.preventDefault();
+          adjustCropScroll(item, img, e.deltaY, null);
+        }, { passive: false });
+        bindCropDrag(imgWrap, img, item, null);
+
+        card.appendChild(imgWrap);
+        
+        const actions = document.createElement('div');
+        actions.className = 'thread-actions';
+
+        // 👍 keep
+        const likeBtn = document.createElement('button');
+        likeBtn.type = 'button';
+        likeBtn.className = 'thread-action';
+        const initialLike = getKeepCount(item.artId);
+        likeBtn.textContent = initialLike + '👍';
+        likeBtn.onclick = (e) => {
+          e.stopPropagation();
+          const next = incrementKeepCount(item.artId);
+          likeBtn.textContent = next + '👍';
+          likeBtn.classList.add('like-pulse');
+          setTimeout(() => likeBtn.classList.remove('like-pulse'), 180);
+          // 排序延後到下次重新載入 / 切換視圖時再反映
+        };
+        actions.appendChild(likeBtn);
+
+        // ⏬ download
+        const dlBtn = document.createElement('button');
+        dlBtn.type = 'button';
+        dlBtn.className = 'thread-action';
+        dlBtn.textContent = '⏬';
+        dlBtn.onclick = (e) => {
+          e.stopPropagation();
+          const a = document.createElement('a');
+          a.href = item.src;
+          a.download = item.originalFile.split('/').pop() || 'image';
+          a.style.position = 'fixed';
+          a.style.left = '-9999px';
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+        };
+        actions.appendChild(dlBtn);
+
+        // 🔁 copy link
+        const copyBtn = document.createElement('button');
+        copyBtn.type = 'button';
+        copyBtn.className = 'thread-action';
+        copyBtn.textContent = '🔁';
+        copyBtn.onclick = (e) => {
+          e.stopPropagation();
+          copyPermalink(item);
+          const original = '🔁';
+          copyBtn.textContent = 'Link copied';
+          setTimeout(() => {
+            copyBtn.textContent = original;
+          }, 900);
+        };
+        actions.appendChild(copyBtn);
+
+        card.appendChild(actions);
+        
+        gallery.appendChild(card);
+      });
+      
+      preloadAdjacent(0);
+    }
+
+    // Preload adjacent images
+    function preloadAdjacent(index) {
+      const indices = [index - 1, index, index + 1].filter(i => i >= 0 && i < currentItems.length);
+      indices.forEach(i => {
+        if (!preloadedImages.has(currentItems[i].src)) {
+          const img = new Image();
+          img.src = currentItems[i].src;
+          preloadedImages.set(currentItems[i].src, img);
+        }
+      });
+    }
+
+    // Open fullscreen
+    function openFullscreen(index) {
+      currentIndex = index;
+      const item = currentItems[index];
+      
+      const fullscreen = document.getElementById('fullscreen');
+      const img = document.getElementById('fullscreenImg');
+      const metadata = document.getElementById('fullscreenMetadata');
+      
+      img.classList.remove('is-ready');
+      img.classList.add('is-entering');
+      img.onload = function() {
+        requestAnimationFrame(function() {
+          requestAnimationFrame(function() {
+            img.classList.add('is-ready');
+            img.classList.remove('is-entering');
+          });
+        });
+      };
+      img.src = item.src;
+      if (img.complete) img.onload();
+      
+      const total = currentItems.length;
+      const counter = total > 0 ? (currentIndex + 1) + ' / ' + total : '';
+      let metadataHTML = '';
+      if (counter) metadataHTML += `<div class="fullscreen-counter">${escapeHtml(counter)}</div>`;
+      if (item.title) {
+        metadataHTML += `<div class="fullscreen-title">${escapeHtml(item.title)}</div>`;
+      }
+      if (item.tags && Array.isArray(item.tags) && item.tags.length > 0) {
+        metadataHTML += `<div class="fullscreen-tags">${item.tags.map(t => escapeHtml(formatTag(t))).join(' ')}</div>`;
+      }
+      if (item.artId) {
+        const citation = item.citationLabel || item.artId;
+        metadataHTML += `<div class="fullscreen-id" data-art-id="${escapeHtml(item.artId)}" data-citation="${escapeHtml(citation)}">ID: ${escapeHtml(item.artId)}</div>`;
+      }
+      metadata.innerHTML = metadataHTML;
+      attachFullscreenIdCopyHandler();
+      enhanceFullscreenTags();
+      updateUrlForArtwork(item);
+      
+      // 首次打開時在圖片區域左下角短暫顯示操作提示
+      if (!sessionStorage.getItem('fullscreenHintSeen')) {
+        sessionStorage.setItem('fullscreenHintSeen', '1');
+        const container = document.querySelector('.fullscreen-image-container');
+        const hint = document.createElement('div');
+        hint.className = 'fullscreen-hint';
+        hint.textContent = 'Tap/click left or right to navigate';
+        container.appendChild(hint);
+        setTimeout(function() { hint.remove(); }, 2200);
+      }
+      
+      fullscreen.classList.add('active');
+      const dockEl = document.getElementById('mobileDock');
+      if (dockEl) dockEl.classList.add('mobile-dock-fullscreen-hidden');
+      
+      // Preload adjacent
+      preloadAdjacent(index);
+      
+      // Keyboard handlers
+      document.addEventListener('keydown', handleFullscreenKeydown);
+    }
+
+    // Close fullscreen
+    function closeFullscreen() {
+      const fullscreen = document.getElementById('fullscreen');
+      fullscreen.classList.remove('active');
+      const dockEl = document.getElementById('mobileDock');
+      if (dockEl) dockEl.classList.remove('mobile-dock-fullscreen-hidden');
+      document.removeEventListener('keydown', handleFullscreenKeydown);
+      updateUrlForPackOnly();
+    }
+
+    // Handle keyboard in fullscreen（與點擊/滑動一致：線性上一張/下一張）
+    function handleFullscreenKeydown(e) {
+      if (e.key === 'Escape') {
+        closeFullscreen();
+      } else if (e.key === 'ArrowLeft') {
+        e.preventDefault();
+        goPrevFullscreen();
+      } else if (e.key === 'ArrowRight') {
+        e.preventDefault();
+        goNextFullscreen();
+      }
+    }
+
+    // 畫廊順序上一張 / 下一張（全屏與鍵盤/點擊/滑動統一使用）
+    function getPrevGalleryIndex() {
+      if (currentItems.length === 0) return 0;
+      return (currentIndex - 1 + currentItems.length) % currentItems.length;
+    }
+    function getNextGalleryIndex() {
+      if (currentItems.length === 0) return 0;
+      return (currentIndex + 1) % currentItems.length;
+    }
+
+    function goToFullscreenIndex(newIndex) {
+      currentIndex = newIndex;
+      const item = currentItems[currentIndex];
+      const img = document.getElementById('fullscreenImg');
+      const metadata = document.getElementById('fullscreenMetadata');
+      img.classList.remove('is-ready');
+      img.classList.add('is-entering');
+      img.onload = function() {
+        requestAnimationFrame(function() {
+          requestAnimationFrame(function() {
+            img.classList.add('is-ready');
+            img.classList.remove('is-entering');
+          });
+        });
+      };
+      img.src = item.src;
+      if (img.complete) img.onload();
+      const total = currentItems.length;
+      const counter = total > 0 ? (currentIndex + 1) + ' / ' + total : '';
+      let metadataHTML = '';
+      if (counter) metadataHTML += `<div class="fullscreen-counter">${escapeHtml(counter)}</div>`;
+      if (item.title) metadataHTML += `<div class="fullscreen-title">${escapeHtml(item.title)}</div>`;
+      if (item.tags && Array.isArray(item.tags) && item.tags.length > 0) metadataHTML += `<div class="fullscreen-tags">${item.tags.map(t => escapeHtml(formatTag(t))).join(' ')}</div>`;
+      if (item.artId) {
+        const citation = item.citationLabel || item.artId;
+        metadataHTML += `<div class="fullscreen-id" data-art-id="${escapeHtml(item.artId)}" data-citation="${escapeHtml(citation)}">ID: ${escapeHtml(item.artId)}</div>`;
+      }
+      metadata.innerHTML = metadataHTML;
+      attachFullscreenIdCopyHandler();
+      enhanceFullscreenTags();
+      preloadAdjacent(currentIndex);
+      updateUrlForArtwork(item);
+    }
+
+    // 全屏線性導航：一律畫廊順序，不組圖循環
+    function goPrevFullscreen() {
+      goToFullscreenIndex(getPrevGalleryIndex());
+    }
+    function goNextFullscreen() {
+      goToFullscreenIndex(getNextGalleryIndex());
+    }
+
+    // Switch pack
+    async function switchPack(packId) {
+      if (packId === currentPackId) return;
+      await loadPack(packId, { sweep: true });
+    }
+
+    // 初始化視圖 tabs
+    function initViewTabs() {
+      const tabThread = document.getElementById('tabThread');
+      const tabMedia = document.getElementById('tabMedia');
+      if (!tabThread || !tabMedia) return;
+      function setMode(mode) {
+        if (viewMode === mode) return;
+        viewMode = mode;
+        tabThread.classList.toggle('active', mode === 'thread');
+        tabMedia.classList.toggle('active', mode === 'media');
+        renderCurrentView();
+        requestAnimationFrame(function() {
+          window.dispatchEvent(new CustomEvent('dock-sync'));
+        });
+      }
+      tabThread.onclick = () => setMode('thread');
+      tabMedia.onclick = () => setMode('media');
+      // 預設 media 已 active，確保 render 一次
+      renderCurrentView();
+    }
+
+    // Escape HTML
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+
+    // 顯示 tag 時一律加上 #（manifest 只存內容，無 #）
+    function formatTag(t) {
+      if (!t) return '';
+      return String(t).startsWith('#') ? t : '#' + t;
+    }
+
+    // Setup event listeners
+    document.getElementById('fullscreenClose').onclick = closeFullscreen;
+
+    // Dark mode：localStorage 優先，首次訪問跟隨系統 prefers-color-scheme
+    function getPreferredTheme() {
+      const saved = localStorage.getItem('theme');
+      if (saved === 'dark' || saved === 'light') return saved;
+      return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    }
+    function applyTheme(dark) {
+      document.body.classList.toggle('dark', !!dark);
+      const icon = dark ? '🌕' : '🌑';
+      const btn = document.getElementById('themeToggle');
+      const btnFs = document.getElementById('themeToggleFullscreen');
+      if (btn) btn.textContent = icon;
+      if (btnFs) btnFs.textContent = icon;
+    }
+    function toggleTheme() {
+      const willBeDark = !document.body.classList.contains('dark');
+      applyTheme(willBeDark);
+      localStorage.setItem('theme', willBeDark ? 'dark' : 'light');
+    }
+    applyTheme(getPreferredTheme() === 'dark');
+    const themeToggleBtn = document.getElementById('themeToggle');
+    if (themeToggleBtn) {
+      themeToggleBtn.onclick = function() {
+        toggleTheme();
+      };
+    }
+    const themeToggleFsBtn = document.getElementById('themeToggleFullscreen');
+    if (themeToggleFsBtn) {
+      themeToggleFsBtn.onclick = function(e) {
+        e.stopPropagation();
+        e.preventDefault();
+        toggleTheme();
+      };
+    }
+
+    // R-18 viewer filter：預設隱藏，開啟後顯示；狀態存 localStorage
+    const r18Toggle = document.getElementById('r18-toggle');
+    if (r18Toggle) {
+      r18Toggle.classList.toggle('active', r18Enabled);
+      r18Toggle.onclick = function() {
+        r18Enabled = !r18Enabled;
+        localStorage.setItem('r18', r18Enabled ? '1' : '0');
+        r18Toggle.classList.toggle('active', r18Enabled);
+        closeFullscreen();
+        currentItems = getFilteredItems();
+        renderCurrentView();
+      };
+    }
+
+    // 全屏導航：左半邊上一張、右半邊下一張（線性畫廊順序，不組圖循環）
+    const fullscreenContainer = document.querySelector('.fullscreen-image-container');
+    let fullscreenSwipeHandled = false;
+    let touchStartX = 0, touchStartY = 0;
+    fullscreenContainer.addEventListener('click', function(e) {
+      if (
+        e.target.closest('.fullscreen-download') ||
+        e.target.closest('.fullscreen-share') ||
+        e.target.closest('.fullscreen-close') ||
+        e.target.closest('.fullscreen-theme-btn') ||
+        e.target.closest('.fullscreen-id')
+      ) return;
+      if (fullscreenSwipeHandled) {
+        fullscreenSwipeHandled = false;
+        return;
+      }
+      e.preventDefault();
+      const rect = this.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      if (x < rect.width / 2) {
+        goPrevFullscreen();
+      } else {
+        goNextFullscreen();
+      }
+    });
+    fullscreenContainer.addEventListener('touchstart', function(e) {
+      if (e.touches.length) {
+        touchStartX = e.touches[0].clientX;
+        touchStartY = e.touches[0].clientY;
+      }
+    }, { passive: true });
+    fullscreenContainer.addEventListener('touchend', function(e) {
+      if (e.changedTouches.length === 0) return;
+      const endX = e.changedTouches[0].clientX;
+      const endY = e.changedTouches[0].clientY;
+      const deltaX = endX - touchStartX;
+      const deltaY = endY - touchStartY;
+      const threshold = 40;
+      if (Math.abs(deltaX) > threshold && Math.abs(deltaX) > Math.abs(deltaY)) {
+        fullscreenSwipeHandled = true;
+        if (deltaX < 0) goNextFullscreen();
+        else goPrevFullscreen();
+      }
+    }, { passive: true });
+    document.getElementById('fullscreenLeft').onclick = function(e) {
+      e.stopPropagation();
+      e.preventDefault();
+      goPrevFullscreen();
+    };
+    document.getElementById('fullscreenRight').onclick = function(e) {
+      e.stopPropagation();
+      e.preventDefault();
+      goNextFullscreen();
+    };
+    document.getElementById('fullscreenDownload').onclick = (e) => {
+      e.stopPropagation();
+      e.preventDefault();
+      const item = currentItems[currentIndex];
+      if (!item) return;
+      const a = document.createElement('a');
+      a.href = item.src;
+      a.download = (item.originalFile && item.originalFile.split('/').pop()) || 'image';
+      a.style.position = 'fixed';
+      a.style.left = '-9999px';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    };
+    const fullscreenShareBtn = document.getElementById('fullscreenShare');
+    if (fullscreenShareBtn) {
+      fullscreenShareBtn.onclick = (e) => {
+        e.stopPropagation();
+        e.preventDefault();
+        if (currentIndex >= 0 && currentItems[currentIndex]) {
+          copyPermalink(currentItems[currentIndex]);
+        }
+      };
+    }
+    const exportCropsBtn = document.getElementById('exportCropsBtn');
+    if (exportCropsBtn) exportCropsBtn.onclick = exportCrops;
+
+    // 作者模式鍵盤切換：
+    // - Mac：⌘ + Option + E
+    // - Windows / Linux：Ctrl + Alt + E
+    // - 備用：單純 Alt + E
+    // ESC：關閉作者模式
+    document.addEventListener('keydown', (e) => {
+      const code = e.code || '';
+      const isEKey = code === 'KeyE'; // 用 code 避免 Mac Option+E 變成 dead key
+
+      // 若正在輸入，不搶熱鍵
+      const el = document.activeElement;
+      const isTyping = el && (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA' || el.isContentEditable);
+      if (isTyping) return;
+
+      const macToggle = isEKey && e.metaKey && e.altKey;
+      const winToggle = isEKey && e.ctrlKey && e.altKey;
+      const altOnlyToggle = isEKey && e.altKey && !e.ctrlKey && !e.metaKey && !e.shiftKey;
+
+      if (macToggle || winToggle || altOnlyToggle) {
+        e.preventDefault();
+        e.stopPropagation();
+        setAuthorMode(!authorMode);
+        return;
+      }
+
+      if (code === 'Escape' && authorMode) {
+        setAuthorMode(false);
+      }
+    }, { capture: true });
+
+    // 點擊 (author) 標籤也可以切換作者模式
+    const authorFlag = document.querySelector('.author-flag');
+    if (authorFlag) {
+      authorFlag.addEventListener('click', (e) => {
+        e.preventDefault();
+        setAuthorMode(!authorMode);
+      });
+    }
+
+    // 移動版 dock：單一共享邏輯，僅依 scrollY / 上次 scrollY / 閾值 / 頂部判斷；Thread / Media 一致
+    (function initMobileDockScroll() {
+      const dock = document.getElementById('mobileDock');
+      if (!dock) return;
+      const threshold = 14;
+      const topHide = 60;
+      const idleDelay = 1000;
+      let lastScrollY = window.scrollY || 0;
+      let ticking = false;
+      let idleTimer = null;
+      function resetIdleTimer() {
+        dock.classList.remove('mobile-dock-idle');
+        if (idleTimer) clearTimeout(idleTimer);
+        idleTimer = setTimeout(function() {
+          if (dock.classList.contains('mobile-dock-visible')) {
+            dock.classList.add('mobile-dock-idle');
+          }
+          idleTimer = null;
+        }, idleDelay);
+      }
+      function updateDock() {
+        const w = window.innerWidth;
+        const y = window.scrollY || 0;
+        if (w > 1100) {
+          dock.classList.remove('mobile-dock-visible', 'mobile-dock-idle');
+          dock.setAttribute('aria-hidden', 'true');
+          lastScrollY = y;
+          ticking = false;
+          return;
+        }
+        resetIdleTimer();
+        if (y < topHide) {
+          dock.classList.remove('mobile-dock-visible', 'mobile-dock-idle');
+          dock.setAttribute('aria-hidden', 'true');
+        } else if (y > lastScrollY + threshold) {
+          dock.classList.add('mobile-dock-visible');
+          dock.classList.remove('mobile-dock-idle');
+          dock.setAttribute('aria-hidden', 'false');
+        } else if (y < lastScrollY - threshold) {
+          dock.classList.remove('mobile-dock-visible', 'mobile-dock-idle');
+          dock.setAttribute('aria-hidden', 'true');
+        }
+        lastScrollY = y;
+        ticking = false;
+      }
+      function syncDockFromScroll() {
+        lastScrollY = window.scrollY || 0;
+        const w = window.innerWidth;
+        const y = lastScrollY;
+        if (w > 1100) {
+          dock.classList.remove('mobile-dock-visible', 'mobile-dock-idle');
+          dock.setAttribute('aria-hidden', 'true');
+          return;
+        }
+        if (y < topHide) {
+          dock.classList.remove('mobile-dock-visible', 'mobile-dock-idle');
+          dock.setAttribute('aria-hidden', 'true');
+        } else {
+          dock.classList.add('mobile-dock-visible');
+          dock.classList.remove('mobile-dock-idle');
+          dock.setAttribute('aria-hidden', 'false');
+        }
+      }
+      window.addEventListener('scroll', function onScroll() {
+        if (ticking) return;
+        ticking = true;
+        requestAnimationFrame(updateDock);
+      }, { passive: true });
+      window.addEventListener('touchstart', resetIdleTimer, { passive: true });
+      window.addEventListener('touchmove', resetIdleTimer, { passive: true });
+      window.addEventListener('pointerdown', resetIdleTimer);
+      window.addEventListener('dock-sync', function() {
+        requestAnimationFrame(syncDockFromScroll);
+      });
+      updateDock();
+    })();
+
+    // Initialize
+    loadSite().then(() => {
+      initViewTabs();
+      // URL 觸發作者模式：hash 包含 #author 時啟用
+      if (location.hash === '#author') {
+        setAuthorMode(true);
+      }
+    });
+  </script>
+</body>
+</html>

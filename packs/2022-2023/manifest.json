@@ -1,0 +1,247 @@
+{
+  "packId": "2022-2023",
+  "label": "2022-2023",
+  "sets": {
+    "top-down-quint": {
+      "title": null,
+      "tags": [
+        "Rockman",
+        "Megaman",
+        "Quint",
+        "クイント",
+        "ロックマン"
+      ]
+    }
+  },
+  "items": [
+    {
+      "file": "20231203__karasuhebi-kamenrider__x-ext.jpeg",
+      "title": null,
+      "tags": [
+        "連縁无現里",
+        "連縁天影戦記",
+        "Len'en Project",
+        "烏蛇",
+        "得手勝手な影",
+        "Kurohebi",
+        "Colt Snake",
+        "Double Snake",
+        "Kamenrider ooo",
+        "仮面ライダーオーズ"
+      ],
+      "set": null,
+      "crop": { "x": 50, "y": 42 }
+    },
+    {
+      "file": "20231129__3bluesproto__x-ext.jpg",
+      "title": null,
+      "tags": [
+        "Rockman",
+        "Meagan",
+        "ロックマン",
+        "ブルーズ",
+        "Blues",
+        "Proto Man"
+      ],
+      "set": null
+    },
+    {
+      "file": "20231127__YumaTsukumo&Astral__x-ext.png",
+      "title": null,
+      "tags": [
+        "Yuma Tsukumo",
+        "Astral",
+        "九十九遊馬",
+        "遊☆戯☆王ZEXAL",
+        "遊戯王ゼアル"
+      ],
+      "set": null,
+      "crop": { "x": 50, "y": 36 }
+    },
+    {
+      "file": "20231028__homecide__qq-ext.jpg",
+      "title": null,
+      "tags": [
+        "ニニンがシノブ伝",
+        "音速丸",
+        "シノブ"
+      ],
+      "set": null
+    },
+    {
+      "file": "20230826__soldier-maid__x-ext.png",
+      "title": null,
+      "tags": [
+        "Kinnikuman Soldier",
+        "ソルジャーマン",
+        "キン肉マンソルジャー"
+      ],
+      "set": null,
+      "crop": { "x": 50, "y": 12 }
+    },
+    {
+      "file": "20230823__moe-bishojou-ryuma__x-ext.png",
+      "title": null,
+      "tags": [
+        "Getter Robo",
+        "ゲッターロボ",
+        "Ryoma Nagare",
+        "流竜馬",
+        "女体化",
+        "幼女"
+      ],
+      "set": null,
+      "crop": { "x": 50, "y": 38 }
+    },
+    {
+      "file": "20230718__zerox__.png",
+      "title": null,
+      "tags": [
+        "Mega Man Zero series",
+        "ロックマンゼロシリーズ",
+        "ロックマン",
+        "ゼロ",
+        "Zero"
+      ],
+      "set": null
+    },
+    {
+      "file": "20230515__momotaro__x-ext.png",
+      "title": null,
+      "tags": [
+        "剣桃太郎",
+        "女体化",
+        "魁!!男塾",
+        "Sakigake!! Otokojuku",
+        "Momotaro Tsurugi"
+      ],
+      "set": null,
+      "crop": { "x": 50, "y": 18 }
+    },
+    {
+      "file": "20230318__asrp__out.png",
+      "title": null,
+      "tags": [
+        "ゴルデンカムイ",
+        "Golden Kamuy",
+        "アシリパ",
+        "Asirpa"
+      ],
+      "set": null,
+      "crop": { "x": 50, "y": 28 }
+    },
+    {
+      "file": "20230317__echa-koi__out.png",
+      "title": null,
+      "tags": [
+        "ゴルデンカムイ",
+        "金カム",
+        "鯉登音之進",
+        "Otonoshin Koito"
+      ],
+      "set": null,
+      "crop": { "x": 50, "y": 62 }
+    },
+    {
+      "file": "20230219__duck-koji__out.png",
+      "title": null,
+      "tags": [
+        "Mazinger Z",
+        "Kabuto Kouji",
+        "兜甲児",
+        "幼女",
+        "女体化"
+      ],
+      "set": null,
+      "crop": { "x": 50, "y": 30 }
+    },
+    {
+      "file": "20230113__fantasy__out.png",
+      "title": null,
+      "tags": [
+        "アイドルマスターミリオンライブ！ シアターデイズ",
+        "天海春香",
+        "The Idolmaster Million Live! Theater Days",
+        "Haruka Amami"
+      ],
+      "set": null,
+      "crop": { "x": 50, "y": 0 }
+    },
+    {
+      "file": "20221211__bra-koji__captions__out.png",
+      "title": null,
+      "tags": [
+        "Mazinger Z",
+        "Kabuto Kouji",
+        "兜甲児",
+        "女体化",
+        "JK"
+      ],
+      "set": null,
+      "crop": { "x": 50, "y": 46 }
+    },
+    {
+      "file": "20220830__shirodo-kamui__out.png",
+      "title": null,
+      "tags": [
+        "カムイ",
+        "カムイ伝",
+        "白土三平",
+        "Sanpei Shirato",
+        "Kamui"
+      ],
+      "set": null
+    },
+    {
+      "file": "20220827__pilot-a__out.png",
+      "title": null,
+      "tags": [
+        "パイロットA",
+        "吉田竜夫",
+        "Tatsuo Yoshida",
+        "Pilot A"
+      ],
+      "set": null,
+      "crop": { "x": 50, "y": 20 }
+    },
+    {
+      "file": "20220827__samsung009__out.jpg",
+      "title": null,
+      "tags": [
+        "サイボーグ009",
+        "Cyborg 009",
+        "ゼロゼロナンバー9",
+        "島村ジョー",
+        "Joe Shimamura"
+      ],
+      "set": null,
+      "crop": { "x": 50, "y": 32 }
+    },
+    {
+      "file": "20220827__top-down-quint__final__out.png",
+      "title": null,
+      "tags": [],
+      "set": "top-down-quint",
+      "crop": { "x": 50, "y": 64 }
+    },
+    {
+      "file": "20220827__top-down-quint__line__out.png",
+      "title": null,
+      "tags": [],
+      "set": "top-down-quint"
+    },
+    {
+      "file": "20220529__greenbird__line__out.png",
+      "title": null,
+      "tags": [
+        "Mega Man Zero series",
+        "ロックマンゼロシリーズ",
+        "ロックマン",
+        "ハルピュイア",
+        "Harpuia"
+      ],
+      "set": null,
+      "crop": { "x": 50, "y": 30 }
+    }
+  ]
+}

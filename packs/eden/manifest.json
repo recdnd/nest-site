@@ -1,0 +1,56 @@
+{
+  "packId": "eden",
+  "label": "eden",
+  "sets": {},
+  "items": [
+    {
+      "file": "20251026__present&hime__out.png",
+      "title": null,
+      "tags": ["oc", "prize"],
+      "set": null,
+      "crop": { "x": 50, "y": 6 }
+    },
+    {
+      "file": "20230731__majou-ocs-red&blue__qq-ext.jpg",
+      "title": null,
+      "tags": ["oc", "Matley", "VV"],
+      "set": null,
+      "crop": { "x": 50, "y": 32 }
+    },
+    {
+      "file": "20230717__vv-oc__ext.jpg",
+      "title": null,
+      "tags": ["oc", "VV"],
+      "set": null,
+      "crop": { "x": 50, "y": 16 }
+    },
+    {
+      "file": "20221211__hair&heir__##__out.jpg",
+      "title": null,
+      "tags": ["oc", "Sylvie"],
+      "set": null,
+      "crop": { "x": 50, "y": 16 }
+    },
+    {
+      "file": "20221207__stella&circe__out.jpg",
+      "title": null,
+      "tags": ["oc", "Stella", "Circe"],
+      "set": null,
+      "crop": { "x": 50, "y": 32 }
+    },
+    {
+      "file": "20230808__ppkura-oc__x-ext.jpeg",
+      "title": null,
+      "tags": ["oc", "PP"],
+      "set": null,
+      "crop": { "x": 50, "y": 36 }
+    },
+    {
+      "file": "20221123__starless-sylvie-cut__out.png",
+      "title": null,
+      "tags": ["oc", "Sylvie", "Matley"],
+      "set": null,
+      "crop": { "x": 50, "y": 50 }
+    }
+  ]
+}

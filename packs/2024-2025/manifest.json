@@ -1,0 +1,372 @@
+{
+  "packId": "2024-2025",
+  "label": "2024-2025",
+  "sets": {
+    "karasuhebi-lenen": {
+      "tags": [
+        "連縁无現里",
+        "連縁天影戦記",
+        "Len'en Project",
+        "烏蛇",
+        "得手勝手な影",
+        "Kurohebi",
+        "Colt Snake",
+        "Double Snake"
+      ]
+    },
+    "karasuhebi-lenen2": {
+      "tags": [
+        "連縁无現里",
+        "連縁天影戦記",
+        "Len'en Project",
+        "烏蛇",
+        "得手勝手な影",
+        "Kurohebi",
+        "Colt Snake",
+        "Double Snake"
+      ]
+    }
+  },
+  "items": [
+    {
+      "file": "20260124__seishun__signed__out.png",
+      "title": null,
+      "tags": [
+        "Mazinger Z",
+        "Kabuto Kouji",
+        "兜甲児",
+        "JK",
+        "女体化"
+      ],
+      "set": null,
+      "crop": { "x": 50, "y": 26 }
+    },
+    {
+      "file": "20251109__peacock-dress__signed__out.png",
+      "title": null,
+      "tags": [
+        "skullgirls",
+        "peacock",
+        "スカルガールズ"
+      ],
+      "set": null,
+      "crop": { "x": 50, "y": 30 }
+    },
+    {
+      "file": "20250515__kinnikuman-soldier__final__out.png",
+      "title": null,
+      "tags": [
+        "Kinnikuman Soldier",
+        "ソルジャーマン",
+        "キン肉マンソルジャー"
+      ],
+      "set": null,
+      "crop": { "x": 50, "y": 46 }
+    },
+    {
+      "file": "20250429__roll__signed__final__out.png",
+      "title": null,
+      "tags": [
+        "Rockman",
+        "Meagan",
+        "ロックマン",
+        "Roll"
+      ],
+      "set": null,
+      "crop": { "x": 50, "y": 38 }
+    },
+    {
+      "file": "20250427__sixfanart__signed__out.png",
+      "title": null,
+      "tags": [
+        "Fullmetal alchemist",
+        "Edward Elric",
+        "エドワード・エルリック",
+        "The Big O",
+        "THE ビッグオー",
+        "R. Dorothy Wayneright",
+        "Armored Trooper VOTOMS",
+        "装甲騎兵ボトムズ",
+        "Black Souls",
+        "Special Rescue Police Winspector",
+        "特警ウインスペクター",
+        "Fire",
+        "ファイヤー",
+        "Fate/Samurai Remnant",
+        "FSR",
+        "Saber",
+        "セイバー"
+      ],
+      "set": null,
+      "crop": { "x": 50, "y": 50 }
+    },
+    {
+      "file": "20250408__ryuma-neko__signed__out.png",
+      "title": null,
+      "tags": [
+        "Getter Robo",
+        "ゲッターロボ",
+        "Ryoma Nagare",
+        "流竜馬",
+        "女体化",
+        "幼女"
+      ],
+      "set": null,
+      "crop": { "x": 50, "y": 24 }
+    },
+    {
+      "file": "20250407__medalist__out.png",
+      "title": null,
+      "tags": [
+        "メダリスト",
+        "結束いのり",
+        "Medalist",
+        "Inori Yuitsuka",
+        "R-18"
+      ],
+      "set": null,
+      "crop": { "x": 50, "y": 30 }
+    },
+    {
+      "file": "20250403__broken-pea__signed__out.png",
+      "title": null,
+      "tags": [
+        "skullgirls",
+        "peacock",
+        "lv5",
+        "スカルガールズ"
+      ],
+      "set": null
+    },
+    {
+      "file": "20250401__mirenu__signed__out.png",
+      "title": null,
+      "tags": [
+        "マクロス7",
+        "Macross 7",
+        "ミレーヌ",
+        "Mylene"
+      ],
+      "set": null,
+      "crop": { "x": 50, "y": 50 }
+    },
+    {
+      "file": "20250331__eyeball__signed__out.png",
+      "title": null,
+      "tags": [
+        "田中ゲタ吉",
+        "ゲゲゲの鬼太郎",
+        "GeGeGe no Kitarō"
+      ],
+      "set": null,
+      "crop": { "x": 50, "y": 38 }
+    },
+    {
+      "file": "20250330__heian-alien__signed__out.png",
+      "title": null,
+      "tags": [
+        "Nue Houjuu",
+        "Touhou 12: Undefined Fantastic Object",
+        "Heian Alien",
+        "封兽鵺",
+        "東方星蓮船"
+      ],
+      "set": null,
+      "crop": { "x": 50, "y": 0 }
+    },
+    {
+      "file": "20250329__hononotora__signed__out.png",
+      "title": null,
+      "tags": [
+        "超人ロック",
+        "LOCKE THE ZUPERMAN"
+      ],
+      "set": null
+    },
+    {
+      "file": "20250328__valentine__out.png",
+      "title": null,
+      "tags": ["Skullgirls 2nd Encore", "Valentine"],
+      "set": null,
+      "crop": { "x": 50, "y": 10 }
+    },
+    {
+      "file": "20250310__daisuke__signed__out.png",
+      "title": null,
+      "tags": [
+        "ジャイアントロボTHE ANIMATION地球が靜止する日",
+        "Giant ROBO",
+        "GR",
+        "Daisaku Kusama",
+        "草間大作"
+      ],
+      "set": null
+    },
+    {
+      "file": "20250207__hone__signed__x-ext.jpg",
+      "title": null,
+      "tags": [
+        "skullgirls",
+        "Marie×Peacock",
+        "スカルガールズ"
+      ],
+      "set": null
+    },
+    {
+      "file": "20250207__marshmelloyaki__signed__x-ext.jpg",
+      "title": null,
+      "tags": [
+        "skullgirls",
+        "marshmallow",
+        "Marie",
+        "スカルガールズ"
+      ],
+      "set": null,
+      "crop": { "x": 50, "y": 60 }
+    },
+    {
+      "file": "20240425__ice-breeze__signed__ext.png",
+      "title": null,
+      "tags": [
+        "Rockman",
+        "Megaman",
+        "Ice",
+        "アイスマン",
+        "ロックマン",
+        "💎💨"
+      ],
+      "set": null,
+      "crop": { "x": 50, "y": 50 }
+    },
+    {
+      "file": "20240329__squirrel__signed__x-ext.png",
+      "title": null,
+      "tags": [
+        "ダンピアのおいしい冒険",
+        "The Delicious Adventures of Dampier",
+        "🐿️"
+      ],
+      "set": null,
+      "crop": { "x": 50, "y": 26 }
+    },
+    {
+      "file": "20240129__katsumizu__signed__pf-ext.png",
+      "title": null,
+      "tags": [
+        "克水",
+        "龍賀克典×水木",
+        "鬼太郎誕生 ゲゲゲの謎"
+      ],
+      "set": null,
+      "crop": { "x": 50, "y": 20 }
+    },
+    {
+      "file": "20240129__rat__signed__x-ext.png",
+      "title": null,
+      "tags": [
+        "田中ゲタ吉",
+        "ゲゲゲの鬼太郎",
+        "GeGeGe no Kitarō",
+        "🐁"
+      ],
+      "set": null,
+      "crop": { "x": 50, "y": 24 }
+    },
+    {
+      "file": "20240108__karasuhebi-lenen2__signed__x-ext.png",
+      "title": null,
+      "tags": [],
+      "set": "karasuhebi-lenen2",
+      "crop": { "x": 50, "y": 34 }
+    },
+    {
+      "file": "20240108__karasuhebi-lenen2__line__x-ext.jpg",
+      "title": null,
+      "tags": [],
+      "set": "karasuhebi-lenen2"
+    },
+    {
+      "file": "20240108__karasuhebi-lenen__signed__x-ext.jpg",
+      "title": null,
+      "tags": [],
+      "set": "karasuhebi-lenen"
+    },
+    {
+      "file": "20240108__karasuhebi-lenen__line__x-ext.jpg",
+      "title": null,
+      "tags": [],
+      "set": "karasuhebi-lenen"
+    },
+    {
+      "file": "20240108__lenen__signed__x-ext.png",
+      "title": null,
+      "tags": [
+        "連縁",
+        "Len'en Project",
+        "鳳聯藪雨",
+        "Yabusame Houlen",
+        "🍘"
+      ],
+      "set": null,
+      "crop": { "x": 50, "y": 32 }
+    },
+    {
+      "file": "20240107__hakabakitaro__signed__x-ext.png",
+      "title": null,
+      "tags": [
+        "Hakaba Kitarō",
+        "墓場鬼太郎"
+      ],
+      "set": null,
+      "crop": { "x": 50, "y": 0 }
+    },
+    {
+      "file": "20240105__Gruul-pig__signed__x-ext.png",
+      "title": null,
+      "tags": [
+        "Magic the Gathering",
+        "MTG",
+        "Gruul",
+        "Domri",
+        "🐗"
+      ],
+      "set": null,
+      "crop": { "x": 50, "y": 22 }
+    },
+    {
+      "file": "20240105__Gruul__x-ext.png",
+      "title": null,
+      "tags": [
+        "Magic the Gathering",
+        "MTG",
+        "Gruul",
+        "Domri"
+      ],
+      "set": null,
+      "crop": { "x": 50, "y": 26 }
+    },
+    {
+      "file": "20240102__akumakun__signed__x-ext.png",
+      "title": null,
+      "tags": [
+        "悪魔くん",
+        "Akuma Kun"
+      ],
+      "set": null,
+      "crop": { "x": 50, "y": 42 }
+    },
+    {
+      "file": "20250420__koji-moe__out.png",
+      "title": null,
+      "tags": [
+        "Mazinger Z",
+        "Kabuto Kouji",
+        "兜甲児",
+        "女体化",
+        "幼女"
+      ],
+      "set": null,
+      "crop": { "x": 50, "y": 32 }
+    }
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "defaultPack": "2024-2025",
+  "packs": [
+    {
+      "id": "2024-2025",
+      "label": "2024-2025",
+      "priority": 100
+    },
+    {
+      "id": "2022-2023",
+      "label": "2022-2023",
+      "priority": 70
+    },
+    {
+      "id": "eden",
+      "label": "eden",
+      "priority": 40
+    },
+    {
+      "id": "past-works",
+      "label": "past-works",
+      "priority": 10
+    }
+  ]
+}
