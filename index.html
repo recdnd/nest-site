@@ -113,25 +113,43 @@
       background: none;
       border: none;
       padding: 4px 0;
-      color: #777;
+      color: #7a7a7a;
       font: inherit;
       text-align: left;
       cursor: pointer;
-      transition: color 0.15s ease;
+      transition: none !important;
     }
-    .pack-link:hover,
+    .pack-link:hover {
+      color: #ffffff;
+      transition: none;
+    }
     .pack-link.active {
-      color: red;
+      color: #d93030;
+    }
+    .pack-link.active:hover {
+      color: #ffffff;
+      transition: none;
     }
     .left-rec-link {
       margin-top: 16px;
-      color: #999;
+      color: #7a7a7a;
       text-decoration: none;
       font-size: 0.85rem;
-      transition: color 0.15s ease;
+      transition: none !important;
     }
     .left-rec-link:hover {
-      color: red;
+      color: #ffffff;
+      transition: none !important;
+    }
+    .left-rec-link.sovereign-key {
+      color: #cfc6c6;
+      letter-spacing: 0.02em;
+      transition: color 0.45s ease, text-shadow 0.45s ease !important;
+    }
+    .left-rec-link.sovereign-key:hover {
+      color: #ff0000;
+      text-shadow: none;
+      transition: none;
     }
     /* 中央視圖：上方 tabs + 下方內容 */
     .gallery-container {
@@ -153,14 +171,23 @@
       border: none;
       padding: 8px 4px;
       font: inherit;
-      color: #777;
+      color: #7a7a7a;
       cursor: pointer;
       border-bottom: 2px solid transparent;
-      transition: color 0.15s ease, border-bottom-color 0.15s ease;
+      transition: none !important;
+    }
+    .view-tab:hover {
+      color: #ffffff;
+      transition: none;
     }
     .view-tab.active {
-      color: red;
-      border-bottom-color: red;
+      color: #d93030;
+      border-bottom-color: #d93030;
+    }
+    .view-tab.active:hover {
+      color: #ffffff;
+      border-bottom-color: #ffffff;
+      transition: none;
     }
     .gallery {
       padding: 8px 16px 16px;
@@ -204,9 +231,10 @@
       padding: 1px 4px;
       border-radius: 4px;
       font-size: 11px;
+      font-weight: 500;
       background: rgba(0, 0, 0, 0.35);
-      color: rgba(255, 255, 255, 0.85);
-      opacity: 0.1;
+      color: #ff4a4a;
+      opacity: 0.85;
       pointer-events: none;
       transition: opacity 0.15s ease;
     }
@@ -269,13 +297,28 @@
       font-size: 0.8rem;
       color: #777;
       cursor: pointer;
-      transition: color 0.15s ease, transform 0.12s ease;
+      transition: color 0.15s ease, transform 0.12s ease, opacity 0.2s ease;
     }
     .thread-action:hover {
       color: red;
     }
+    /* Nest 按鈕：count=0 淡、hover 變亮；count≥1 紅字強調，為站內核心語彙 */
+    .thread-action.nest-btn {
+      opacity: 0.5;
+    }
+    .thread-action.nest-btn:hover {
+      opacity: 0.9;
+    }
+    .thread-action.nest-btn.has-keep {
+      opacity: 1;
+      color: #ff4a4a;
+      font-weight: 500;
+    }
+    .thread-action.nest-btn.has-keep:hover {
+      color: #ff4a4a;
+    }
     .thread-action.like-pulse {
-      color: red;
+      color: #ff4a4a;
       transform: scale(1.06);
     }
     /* 移動版 thread：畫廊級完整顯示，橫圖不裁；無深色外框，圓角僅在圖片上 */
@@ -534,7 +577,7 @@
       opacity: 1;
       filter: grayscale(0) brightness(1);
     }
-    /* 全屏操作按鈕：浮在圖片右下角，預設 10% 透明；hover 按鈕本身時加亮 */
+    /* 全屏操作按鈕：配色與動態對齊 Thread/Media（進入即響應、離開 0.45s 慢收） */
     .fullscreen-download,
     .fullscreen-share {
       position: absolute;
@@ -549,7 +592,7 @@
       padding: 0;
       line-height: 1;
       font-size: 14px;
-      color: #ccc;
+      color: #7a7a7a;
       cursor: pointer;
       opacity: 0.1;
       pointer-events: auto;
@@ -567,6 +610,8 @@
     .fullscreen-download:hover,
     .fullscreen-share:hover {
       opacity: 0.8;
+      color: #2a2a2a;
+      transition: opacity 0.15s ease;
     }
     .fullscreen-download:focus,
     .fullscreen-download:focus-visible,
@@ -589,7 +634,7 @@
       height: 40px;
       background: transparent;
       border: none;
-      color: #ccc;
+      color: #7a7a7a;
       font-size: 1.5rem;
       cursor: pointer;
       display: flex;
@@ -599,12 +644,14 @@
       box-shadow: none;
       text-shadow: none;
       outline: none;
+      transition: none;
     }
     .fullscreen-close:hover {
-      color: red;
+      color: #2a2a2a;
       background: transparent;
       box-shadow: none;
       outline: none;
+      transition: none;
     }
     .fullscreen-close:focus,
     .fullscreen-close:focus-visible {
@@ -814,24 +861,53 @@
       color: #888;
     }
     body.dark .pack-link {
-      color: #888;
+      color: #8a8a8a;
+      transition: none !important;
     }
-    body.dark .pack-link:hover,
+    body.dark .pack-link:hover {
+      color: #ffffff;
+      transition: none;
+    }
     body.dark .pack-link.active {
-      color: #e55;
+      color: #ff5a5a;
+    }
+    body.dark .pack-link.active:hover {
+      color: #ffffff;
+      transition: none;
     }
     body.dark .left-rec-link {
-      color: #777;
+      color: #8a8a8a;
+      transition: none !important;
     }
     body.dark .left-rec-link:hover {
-      color: #e55;
+      color: #ffffff;
+      transition: none;
+    }
+    body.dark .left-rec-link.sovereign-key {
+      color: #6e0000;
+      transition: color 0.45s ease, text-shadow 0.45s ease !important;
+    }
+    body.dark .left-rec-link.sovereign-key:hover {
+      color: #ff0000;
+      text-shadow: none;
+      transition: none;
     }
     body.dark .view-tab {
-      color: #888;
+      color: #8a8a8a;
+      transition: none !important;
+    }
+    body.dark .view-tab:hover {
+      color: #ffffff;
+      transition: none;
     }
     body.dark .view-tab.active {
-      color: #e55;
-      border-bottom-color: #e55;
+      color: #ff5a5a;
+      border-bottom-color: #ff5a5a;
+    }
+    body.dark .view-tab.active:hover {
+      color: #ffffff;
+      border-bottom-color: #ffffff;
+      transition: none;
     }
     body.dark .fullscreen-metadata,
     body.dark .fullscreen-title,
@@ -842,30 +918,32 @@
       color: #888;
     }
     body.dark .fullscreen-close {
-      color: #888;
+      color: #8a8a8a;
     }
     body.dark .fullscreen-close:hover {
-      color: #e55;
+      color: #d8d8d8;
+      transition: none;
     }
     body.dark .fullscreen-download,
     body.dark .fullscreen-share {
-      color: #888;
+      color: #8a8a8a;
     }
     body.dark .fullscreen-image-wrap:hover .fullscreen-download,
     body.dark .fullscreen-image-wrap:hover .fullscreen-share,
     body.dark .fullscreen-download:hover,
     body.dark .fullscreen-share:hover {
-      color: #ddd;
+      color: #d8d8d8;
+      transition: none;
     }
 
-    /* NEST 進入效果（參考 assets，自寫版）：紅屏淡出、主內容短震動、鼠標粒子層 */
+    /* NEST 進入效果（參考 assets，自寫版）：紅屏淡出、主內容短震動、鼠標粒子層；顏色與頁面 red 一致 */
     #nestIntroCover {
       position: fixed;
       top: 0;
       left: 0;
       width: 100vw;
       height: 100vh;
-      background: #e55;
+      background: red;
       z-index: 9999;
       pointer-events: none;
       opacity: 1;
@@ -907,7 +985,7 @@
     <aside class="left-rail">
       <nav class="pack-list" id="packList"></nav>
       <button type="button" class="left-rec-link author-only" id="exportCropsBtn" style="background:none;border:none;cursor:pointer;margin-top:8px;">/export-crops</button>
-      <a href="https://rec.ooo" class="left-rec-link" title="rec.ooo" target="_blank" rel="noopener">/[𝓡::主權主鏈]</a>
+      <a href="https://rec.ooo" class="left-rec-link sovereign-key" title="rec.ooo" target="_blank" rel="noopener">/[𝓡::主權主鏈]</a>
       <a href="./rights.html" class="left-rec-link" title="Rights / NASL">/rights</a>
     </aside>
     <main class="center">
@@ -1532,12 +1610,22 @@
       });
     }
 
-    // Thread 按鈕：👍/🪺/🪹 — hover 後該按鈕永久顯示🪹；數量 >= 1 時顯示🪺
-    var nestHoveredArtIds = new Set();
-    function getLikeIcon(artId, count) {
-      if (nestHoveredArtIds.has(artId)) return '🪹';
-      if (count >= 1) return '🪺';
-      return '👍';
+    // ----- Nest Keep 按鈕設計（工程師規格・巢系語義定稿） -----
+    // 站內主語言為 nest/keep，僅使用 🪹 / 🪺，不使用 👍。
+    //
+    // 顯示規則：
+    // - count >= 1 → 一律顯示 🪺N（N 為數字，icon 在前）。唯一持久狀態。
+    // - count = 0  → 顯示 🪹。可互動狀態，僅作視覺提示。
+    //
+    // 互動：
+    // - click：唯一可持久化狀態變更。count +1，按鈕切為 🪺N，加 .has-keep，150ms pulse。
+    // - hover：不寫入任何狀態。僅用 CSS 改變視覺（count=0 時 opacity 0.5→0.9）。
+    //
+    // 資料：keepCounts[artId] 存 localStorage（KEEP_STORE_KEY）。排序：Thread 依 keep 次數降序。
+    // Media：縮圖右下角 badge 僅 count >= 1 時顯示，格式 🪺N。
+    //
+    function getNestLabel(count) {
+      return count >= 1 ? '🪺' + count : '🪹';
     }
 
     // 依目前模式渲染（media / thread）
@@ -1576,11 +1664,11 @@
         updateCropIndicator(indicator, item);
         bindCropEditing(img, item, indicator, () => openFullscreen(index));
 
-        // keep badge（數量 >= 1 顯示 N🪺，0 則隱藏）
+        // keep badge（count >= 1 顯示 🪺N，icon 在前；0 則隱藏）
         const keepCount = getKeepCount(item.artId);
         const keepBadge = document.createElement('div');
         keepBadge.className = 'keep-badge';
-        keepBadge.textContent = keepCount + '🪺';
+        keepBadge.textContent = keepCount ? '🪺' + keepCount : '';
         if (!keepCount) {
           keepBadge.style.display = 'none';
         }
@@ -1810,24 +1898,21 @@
         const actions = document.createElement('div');
         actions.className = 'thread-actions';
 
-        // 👍 keep：數量 >= 1 顯示🪺，hover 後該按鈕永久改為🪹
+        // Nest keep：純巢系語義 🪹 / 🪺N；click 為唯一持久狀態，hover 僅視覺
         const likeBtn = document.createElement('button');
         likeBtn.type = 'button';
-        likeBtn.className = 'thread-action';
-        const initialLike = getKeepCount(item.artId);
-        likeBtn.textContent = initialLike + getLikeIcon(item.artId, initialLike);
+        likeBtn.className = 'thread-action nest-btn';
+        const initialKeep = getKeepCount(item.artId);
+        likeBtn.textContent = getNestLabel(initialKeep);
+        if (initialKeep >= 1) likeBtn.classList.add('has-keep');
         likeBtn.onclick = (e) => {
           e.stopPropagation();
           const next = incrementKeepCount(item.artId);
-          likeBtn.textContent = next + getLikeIcon(item.artId, next);
+          likeBtn.textContent = getNestLabel(next);
+          likeBtn.classList.add('has-keep');
           likeBtn.classList.add('like-pulse');
-          setTimeout(() => likeBtn.classList.remove('like-pulse'), 180);
-          // 排序延後到下次重新載入 / 切換視圖時再反映
+          setTimeout(() => likeBtn.classList.remove('like-pulse'), 150);
         };
-        likeBtn.addEventListener('mouseenter', function() {
-          nestHoveredArtIds.add(item.artId);
-          likeBtn.textContent = getKeepCount(item.artId) + '🪹';
-        });
         actions.appendChild(likeBtn);
 
         // ⏬ download
