@@ -30,8 +30,10 @@
       --center-width: 720px;
       --line-soft: rgba(0, 0, 0, 0.08);
     }
-    /* 三欄 Twitter 風格佈局：整體居中、無白底、淡線分隔 */
+    /* 三欄 Twitter 風格佈局：整體居中、無白底、淡線分隔；z-index 確保在 intro/粒子層之下仍正確疊層顯示 */
     .app {
+      position: relative;
+      z-index: 1;
       min-height: 100vh;
       max-width: 1160px;
       margin: 0 auto;
@@ -855,9 +857,52 @@
     body.dark .fullscreen-share:hover {
       color: #ddd;
     }
+
+    /* NEST 進入效果（參考 assets，自寫版）：紅屏淡出、主內容短震動、鼠標粒子層 */
+    #nestIntroCover {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: #e55;
+      z-index: 9999;
+      pointer-events: none;
+      opacity: 1;
+    }
+    #nestIntroCover.nest-intro-done {
+      animation: nestFadeOutCover 0.55s ease forwards;
+    }
+    @keyframes nestFadeOutCover {
+      0%   { opacity: 1; }
+      85%  { opacity: 0.08; }
+      100% { opacity: 0; visibility: hidden; }
+    }
+    .app.nest-intro-shake {
+      animation: nestIntroShake 0.4s ease-out;
+    }
+    @keyframes nestIntroShake {
+      0%   { opacity: 0.92; transform: translate(0, 0); }
+      25%  { transform: translate(2px, -1px); }
+      50%  { transform: translate(-2px, 1px); }
+      75%  { transform: translate(1px, 1px); }
+      100% { opacity: 1; transform: translate(0, 0); }
+    }
+    /* 粒子層在 thread/媒體內容之上，pointer-events: none 讓點擊穿透 */
+    #nestParticleCanvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 50;
+      pointer-events: none;
+    }
   </style>
 </head>
 <body>
+  <div id="nestIntroCover" class="nest-intro-cover" aria-hidden="true"></div>
+  <canvas id="nestParticleCanvas" aria-hidden="true"></canvas>
   <div class="app">
     <aside class="left-rail">
       <nav class="pack-list" id="packList"></nav>
@@ -1487,6 +1532,14 @@
       });
     }
 
+    // Thread 按鈕：👍/🪺/🪹 — hover 後該按鈕永久顯示🪹；數量 >= 1 時顯示🪺
+    var nestHoveredArtIds = new Set();
+    function getLikeIcon(artId, count) {
+      if (nestHoveredArtIds.has(artId)) return '🪹';
+      if (count >= 1) return '🪺';
+      return '👍';
+    }
+
     // 依目前模式渲染（media / thread）
     function renderCurrentView() {
       if (viewMode === 'thread') {
@@ -1523,11 +1576,11 @@
         updateCropIndicator(indicator, item);
         bindCropEditing(img, item, indicator, () => openFullscreen(index));
 
-        // keep badge（僅在有 keep 次數時顯示）
+        // keep badge（數量 >= 1 顯示 N🪺，0 則隱藏）
         const keepCount = getKeepCount(item.artId);
         const keepBadge = document.createElement('div');
         keepBadge.className = 'keep-badge';
-        keepBadge.textContent = keepCount + '👍';
+        keepBadge.textContent = keepCount + '🪺';
         if (!keepCount) {
           keepBadge.style.display = 'none';
         }
@@ -1757,20 +1810,24 @@
         const actions = document.createElement('div');
         actions.className = 'thread-actions';
 
-        // 👍 keep
+        // 👍 keep：數量 >= 1 顯示🪺，hover 後該按鈕永久改為🪹
         const likeBtn = document.createElement('button');
         likeBtn.type = 'button';
         likeBtn.className = 'thread-action';
         const initialLike = getKeepCount(item.artId);
-        likeBtn.textContent = initialLike + '👍';
+        likeBtn.textContent = initialLike + getLikeIcon(item.artId, initialLike);
         likeBtn.onclick = (e) => {
           e.stopPropagation();
           const next = incrementKeepCount(item.artId);
-          likeBtn.textContent = next + '👍';
+          likeBtn.textContent = next + getLikeIcon(item.artId, next);
           likeBtn.classList.add('like-pulse');
           setTimeout(() => likeBtn.classList.remove('like-pulse'), 180);
           // 排序延後到下次重新載入 / 切換視圖時再反映
         };
+        likeBtn.addEventListener('mouseenter', function() {
+          nestHoveredArtIds.add(item.artId);
+          likeBtn.textContent = getKeepCount(item.artId) + '🪹';
+        });
         actions.appendChild(likeBtn);
 
         // ⏬ download
@@ -2008,11 +2065,11 @@
     // Setup event listeners
     document.getElementById('fullscreenClose').onclick = closeFullscreen;
 
-    // Dark mode：localStorage 優先，首次訪問跟隨系統 prefers-color-scheme
+    // Dark mode：localStorage 優先，首次訪問默認黑色主題
     function getPreferredTheme() {
       const saved = localStorage.getItem('theme');
       if (saved === 'dark' || saved === 'light') return saved;
-      return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      return 'dark';
     }
     function applyTheme(dark) {
       document.body.classList.toggle('dark', !!dark);
@@ -2252,6 +2309,82 @@
         requestAnimationFrame(syncDockFromScroll);
       });
       updateDock();
+    })();
+
+    // NEST 進入效果（參考 assets，自寫版）：紅屏淡出、主內容短震動；動畫結束後徹底收掉 cover 避免擋住照片牆
+    (function runNestIntro() {
+      var cover = document.getElementById('nestIntroCover');
+      var app = document.querySelector('.app');
+      if (!cover || !app) return;
+      function hideCover() {
+        cover.style.display = 'none';
+      }
+      cover.classList.add('nest-intro-done');
+      cover.addEventListener('animationend', hideCover);
+      setTimeout(hideCover, 650); /* fallback 若 animationend 未觸發 */
+      setTimeout(function() {
+        app.classList.add('nest-intro-shake');
+      }, 380);
+      setTimeout(function() {
+        app.classList.remove('nest-intro-shake');
+      }, 780);
+    })();
+
+    // NEST 鼠標粒子：顏色與大小對齊 rec.ooo（暗=紅、亮=螢光綠）
+    (function initNestParticles() {
+      var canvas = document.getElementById('nestParticleCanvas');
+      if (!canvas) return;
+      var ctx = canvas.getContext('2d');
+      var particles = [];
+      function resize() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+      }
+      function getParticleColor() {
+        return document.body.classList.contains('dark')
+          ? 'rgba(255, 0, 0, 1)'
+          : 'rgba(31, 255, 0, 1)';
+      }
+      function Particle(x, y) {
+        this.x = x;
+        this.y = y;
+        this.size = 1;
+        this.speedX = (Math.random() * 2) - 1;
+        this.speedY = (Math.random() * 2) - 1;
+      }
+      Particle.prototype.step = function() {
+        this.x += this.speedX;
+        this.y += this.speedY;
+        this.size *= 0.98;
+        var color = getParticleColor();
+        ctx.globalAlpha = 1.0;
+        ctx.strokeStyle = color;
+        ctx.fillStyle = color;
+        ctx.shadowColor = color;
+        ctx.lineWidth = 0.5;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.stroke();
+      };
+      function spawn(e) {
+        var x = e.clientX != null ? e.clientX : e.touches && e.touches[0] ? e.touches[0].clientX : 0;
+        var y = e.clientY != null ? e.clientY : e.touches && e.touches[0] ? e.touches[0].clientY : 0;
+        for (var i = 0; i < 5; i++) particles.push(new Particle(x, y));
+      }
+      function tick() {
+        if (!ctx || !canvas.width) return;
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        for (var i = particles.length - 1; i >= 0; i--) {
+          particles[i].step();
+          if (particles[i].size <= 0.2) particles.splice(i, 1);
+        }
+      }
+      resize();
+      window.addEventListener('resize', resize);
+      document.addEventListener('mousemove', spawn);
+      document.addEventListener('touchmove', spawn, { passive: true });
+      setInterval(tick, 20);
     })();
 
     // Initialize
