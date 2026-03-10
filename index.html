@@ -81,6 +81,44 @@
       display: flex;
       align-items: center;
       gap: 8px;
+      position: relative;
+      will-change: transform, filter;
+    }
+    /* Theme 切換瞬間：標題斜向短促 glitch */
+    .site-title.theme-glitch {
+      animation: titleThemeGlitch 220ms steps(2, end);
+    }
+    @keyframes titleThemeGlitch {
+      0% {
+        transform: translate(0, 0) skew(0deg);
+        filter: none;
+      }
+      18% {
+        transform: translate(2px, -1px) skew(-6deg);
+        filter:
+          drop-shadow(-1px 0 0 rgba(255, 0, 0, 0.85))
+          drop-shadow(1px 0 0 rgba(255, 255, 255, 0.55));
+      }
+      36% {
+        transform: translate(-3px, 2px) skew(5deg);
+        filter:
+          drop-shadow(-2px 0 0 rgba(255, 0, 0, 0.9))
+          drop-shadow(2px 0 0 rgba(255, 240, 210, 0.7));
+      }
+      54% {
+        transform: translate(2px, 2px) skew(-4deg);
+        filter:
+          drop-shadow(-1px 0 0 rgba(255, 0, 0, 0.7))
+          drop-shadow(1px 0 0 rgba(255, 255, 255, 0.45));
+      }
+      72% {
+        transform: translate(-1px, -2px) skew(3deg);
+        filter: drop-shadow(0 0 4px rgba(255, 60, 60, 0.35));
+      }
+      100% {
+        transform: translate(0, 0) skew(0deg);
+        filter: none;
+      }
     }
     .site-logo {
       width: 22px;
@@ -135,25 +173,52 @@
       color: #7a7a7a;
       text-decoration: none;
       font-size: 0.85rem;
-      transition: none !important;
+      transition: none;
     }
     .left-rec-link:hover {
       color: #ffffff;
-      transition: none !important;
+      transition: none;
     }
+    /* /[𝓡::主權主鏈] 常態＝安靜印記；hover＝亮紅核心 + ::after 暖白餘溫光池 */
     .left-rec-link.sovereign-key {
+      position: relative;
       color: #cfc6c6;
       letter-spacing: 0.02em;
       text-shadow: none;
-      transition: color 0.8s ease-out, text-shadow 0.8s ease-out;
+      transition:
+        color 0.4s ease-out,
+        text-shadow 1.2s ease-out;
     }
     .left-rec-link.sovereign-key:hover {
       color: #ff0000;
       text-shadow:
-        0 0 6px rgba(255, 0, 0, 0.7),
-        0 0 16px rgba(255, 0, 0, 0.4),
-        0 0 32px rgba(255, 40, 40, 0.25);
-      transition: color 0.05s ease-in, text-shadow 0.05s ease-in;
+        0 0 4px rgba(255,20,20,0.95),
+        0 0 10px rgba(255,60,40,0.88),
+        0 0 22px rgba(255,145,85,0.72),
+        0 0 42px rgba(255,210,150,0.52),
+        0 0 76px rgba(255,245,220,0.34),
+        0 0 112px rgba(255,248,232,0.20);
+      transition:
+        color 0.04s ease-in,
+        text-shadow 0.04s ease-in;
+    }
+    .left-rec-link.sovereign-key::after {
+      content: attr(data-text);
+      position: absolute;
+      left: 0;
+      top: 0;
+      color: transparent;
+      text-shadow:
+        0 0 60px rgba(255,235,200,0.0),
+        0 0 120px rgba(255,240,210,0.0);
+      pointer-events: none;
+      transition: text-shadow 1.4s ease-out;
+    }
+    .left-rec-link.sovereign-key:hover::after {
+      text-shadow:
+        0 0 60px rgba(255,235,200,0.55),
+        0 0 120px rgba(255,240,210,0.32);
+      transition: text-shadow 0.05s ease-in;
     }
     /* 中央視圖：上方 tabs + 下方內容 */
     .gallery-container {
@@ -855,6 +920,9 @@
     body.dark .view-tabs {
       border-color: #333;
     }
+    body.dark .thread-item {
+      border-bottom-color: #333;
+    }
     body.dark .thread-meta {
       color: #aaa;
     }
@@ -878,7 +946,7 @@
     }
     body.dark .left-rec-link {
       color: #8a8a8a;
-      transition: none !important;
+      transition: none;
     }
     body.dark .left-rec-link:hover {
       color: #ffffff;
@@ -887,15 +955,23 @@
     body.dark .left-rec-link.sovereign-key {
       color: #6e0000;
       text-shadow: none;
-      transition: color 0.8s ease-out, text-shadow 0.8s ease-out;
+      transition:
+        color 1.3s ease-out,
+        text-shadow 2.5s ease-out;
     }
+    /* hover：瞬間點亮，內紅外暖白（暗色主題），餘溫由 ::after 處理 */
     body.dark .left-rec-link.sovereign-key:hover {
-      color: #ff0000;
+      color: #ffe2bf;
       text-shadow:
-        0 0 6px rgba(255, 0, 0, 0.7),
-        0 0 16px rgba(255, 0, 0, 0.4),
-        0 0 32px rgba(255, 40, 40, 0.25);
-      transition: color 0.05s ease-in, text-shadow 0.05s ease-in;
+        0 0 4px rgba(255,0,0,1),
+        0 0 12px rgba(255,55,35,0.92),
+        0 0 26px rgba(255,150,90,0.78),
+        0 0 50px rgba(255,220,160,0.58),
+        0 0 90px rgba(255,245,220,0.40),
+        0 0 130px rgba(255,250,238,0.24);
+      transition:
+        color 0.04s ease-in,
+        text-shadow 0.04s ease-in;
     }
     body.dark .view-tab {
       color: #8a8a8a;
@@ -990,7 +1066,7 @@
     <aside class="left-rail">
       <nav class="pack-list" id="packList"></nav>
       <button type="button" class="left-rec-link author-only" id="exportCropsBtn" style="background:none;border:none;cursor:pointer;margin-top:8px;">/export-crops</button>
-      <a href="https://rec.ooo" class="left-rec-link sovereign-key" title="rec.ooo" target="_blank" rel="noopener">/[𝓡::主權主鏈]</a>
+      <a href="https://rec.ooo" class="left-rec-link sovereign-key" title="rec.ooo" target="_blank" rel="noopener" data-text="/[𝓡::主權主鏈]">/[𝓡::主權主鏈]</a>
       <a href="./rights.html" class="left-rec-link" title="Rights / NASL">/rights</a>
     </aside>
     <main class="center">
@@ -2168,6 +2244,44 @@
       const btnFs = document.getElementById('themeToggleFullscreen');
       if (btn) btn.textContent = icon;
       if (btnFs) btnFs.textContent = icon;
+
+      // Theme glitch：切換亮暗時讓標題短促斜向抖動
+      const titleEl = document.querySelector('.site-title');
+      if (titleEl) {
+        titleEl.classList.remove('theme-glitch');
+        void titleEl.offsetWidth; // 強制 reflow 以重播動畫
+        titleEl.classList.add('theme-glitch');
+        setTimeout(function () {
+          titleEl.classList.remove('theme-glitch');
+        }, 260);
+      }
+
+      // #region agent log - theme apply (H1,H4)
+      try {
+        const sov = document.querySelector('.left-rec-link.sovereign-key');
+        if (sov) {
+          const cs = getComputedStyle(sov);
+          fetch('http://127.0.0.1:7247/ingest/1b725b42-f2b6-4d18-b486-e34746e2ff57', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              id: 'log_' + Date.now() + '_theme',
+              runId: 'themeToggle',
+              hypothesisId: 'H1_H4',
+              location: 'index.html:applyTheme',
+              message: 'applyTheme applied, sovereign-key computed style',
+              data: {
+                dark: !!dark,
+                color: cs.color,
+                textShadow: cs.textShadow,
+                transition: cs.transition
+              },
+              timestamp: Date.now()
+            })
+          }).catch(()=>{});
+        }
+      } catch (e) {}
+      // #endregion agent log
     }
     function toggleTheme() {
       const willBeDark = !document.body.classList.contains('dark');
@@ -2175,6 +2289,39 @@
       localStorage.setItem('theme', willBeDark ? 'dark' : 'light');
     }
     applyTheme(getPreferredTheme() === 'dark');
+
+    // #region agent log - hover instrumentation (H1,H2,H3)
+    try {
+      const sov = document.querySelector('.left-rec-link.sovereign-key');
+      if (sov) {
+        ['mouseenter', 'mouseleave'].forEach(function(ev) {
+          sov.addEventListener(ev, function() {
+            try {
+              const cs = getComputedStyle(sov);
+              fetch('http://127.0.0.1:7247/ingest/1b725b42-f2b6-4d18-b486-e34746e2ff57', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                  id: 'log_' + Date.now() + '_hover',
+                  runId: 'hover',
+                  hypothesisId: 'H1_H2_H3',
+                  location: 'index.html:sovHover',
+                  message: 'sovereign-key hover event ' + ev,
+                  data: {
+                    event: ev,
+                    color: cs.color,
+                    textShadow: cs.textShadow,
+                    transition: cs.transition
+                  },
+                  timestamp: Date.now()
+                })
+              }).catch(()=>{});
+            } catch (e) {}
+          });
+        });
+      }
+    } catch (e) {}
+    // #endregion agent log
     const themeToggleBtn = document.getElementById('themeToggle');
     if (themeToggleBtn) {
       themeToggleBtn.onclick = function() {
