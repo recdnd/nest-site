@@ -144,12 +144,16 @@
     .left-rec-link.sovereign-key {
       color: #cfc6c6;
       letter-spacing: 0.02em;
-      transition: none !important;
+      text-shadow: none;
+      transition: color 0.8s ease-out, text-shadow 0.8s ease-out;
     }
     .left-rec-link.sovereign-key:hover {
       color: #ff0000;
-      text-shadow: none;
-      transition: color 0.45s ease, text-shadow 0.45s ease;
+      text-shadow:
+        0 0 6px rgba(255, 0, 0, 0.7),
+        0 0 16px rgba(255, 0, 0, 0.4),
+        0 0 32px rgba(255, 40, 40, 0.25);
+      transition: color 0.05s ease-in, text-shadow 0.05s ease-in;
     }
     /* 中央視圖：上方 tabs + 下方內容 */
     .gallery-container {
@@ -882,12 +886,16 @@
     }
     body.dark .left-rec-link.sovereign-key {
       color: #6e0000;
-      transition: none !important;
+      text-shadow: none;
+      transition: color 0.8s ease-out, text-shadow 0.8s ease-out;
     }
     body.dark .left-rec-link.sovereign-key:hover {
       color: #ff0000;
-      text-shadow: none;
-      transition: color 0.45s ease, text-shadow 0.45s ease;
+      text-shadow:
+        0 0 6px rgba(255, 0, 0, 0.7),
+        0 0 16px rgba(255, 0, 0, 0.4),
+        0 0 32px rgba(255, 40, 40, 0.25);
+      transition: color 0.05s ease-in, text-shadow 0.05s ease-in;
     }
     body.dark .view-tab {
       color: #8a8a8a;
