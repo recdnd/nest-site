@@ -1829,7 +1829,7 @@
         const dateStr = getDateFromOriginalFile(item.originalFile);
         const metaPieces = [];
         if (dateStr) metaPieces.push(dateStr);
-        if (packLabel) metaPieces.push(packLabel);
+        if (packLabel) metaPieces.push(packLabel.replace(/_/g, '-'));
         if (item.title) metaPieces.push(item.title);
         const meta = document.createElement('div');
         meta.className = 'thread-meta';
