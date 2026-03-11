@@ -4,7 +4,18 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="icon" href="favicon32.png" type="image/png" />
-  <title>死の巣の劇</title>
+  <title>死の巣の劇 | nest.rec.ooo</title>
+  <meta name="description" content="Rec 的個人數位畫庫，收錄多個年份與主題的 fanart、原創與檔案。可按 pack 與 tag 瀏覽作品，每張作品均有獨立可索引頁面。" />
+  <link rel="canonical" href="https://nest.rec.ooo/" id="canonical-link" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://nest.rec.ooo/" />
+  <meta property="og:title" content="死の巣の劇 | nest.rec.ooo" />
+  <meta property="og:description" content="Rec 的個人數位畫庫，收錄多個年份與主題的 fanart、原創與檔案。可按 pack 與 tag 瀏覽作品。" />
+  <meta property="og:site_name" content="死の巣の劇" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="死の巣の劇 | nest.rec.ooo" />
+  <meta name="twitter:description" content="Rec 的個人數位畫庫，收錄多個年份與主題的 fanart、原創與檔案。" />
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"死の巣の劇","url":"https://nest.rec.ooo/","description":"個人數位畫庫，fanart / 原創 / 檔案，可按 pack 與 tag 瀏覽"}</script>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Courier+Prime&display=swap');
     * {
@@ -1062,6 +1073,7 @@
   </style>
 </head>
 <body>
+  <p class="seo-intro" style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0">死の巣の劇是 Rec 的數位畫庫，收錄多個年份與主題的 fanart、原創與檔案；可按 pack 與 tag 瀏覽，每張作品均有獨立頁面。</p>
   <div id="nestIntroCover" class="nest-intro-cover" aria-hidden="true"></div>
   <canvas id="nestParticleCanvas" aria-hidden="true"></canvas>
   <div class="app">
@@ -2232,6 +2244,17 @@
 
     // Setup event listeners
     document.getElementById('fullscreenClose').onclick = closeFullscreen;
+
+    // Canonical：有 ?art= 或 ?pack= 時指向正式 SEO 頁，避免 query URL 被當主索引
+    (function () {
+      var link = document.getElementById('canonical-link');
+      if (!link) return;
+      var params = new URLSearchParams(window.location.search || '');
+      var art = params.get('art');
+      var pack = params.get('pack');
+      if (art) link.href = 'https://nest.rec.ooo/art/' + encodeURIComponent(art) + '/';
+      else if (pack) link.href = 'https://nest.rec.ooo/pack/' + encodeURIComponent(pack) + '/';
+    })();
 
     // Dark mode：localStorage 優先，首次訪問默認黑色主題
     function getPreferredTheme() {
